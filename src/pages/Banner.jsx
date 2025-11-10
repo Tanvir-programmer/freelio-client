@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { Link } from "react-router"; // Assuming react-router-dom for navigation
 
 const Banner = () => {
@@ -46,7 +46,6 @@ const Banner = () => {
     tap: { scale: 0.95 },
   };
 
-  // Background animation for a subtle, moving effect (optional, can be more complex)
   const backgroundAnimation = {
     initial: { backgroundPosition: "0% 50%" },
     animate: {
@@ -62,7 +61,7 @@ const Banner = () => {
 
   return (
     // Main banner container with a subtle gradient and background animation
-    <motion.div
+    <Motion.div
       className="relative overflow-hidden w-full h-[400px] flex items-center justify-center text-center px-4 rounded-xl my-5"
       initial="initial"
       animate="animate"
@@ -89,31 +88,31 @@ const Banner = () => {
         }
       `}</style>
 
-      <motion.div
+      <Motion.div
         className="relative z-10 max-w-4xl mx-auto"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <motion.h1
+        <Motion.h1
           className="text-5xl font-extrabold text-gray-800 mb-4 tracking-tight leading-tight"
           variants={itemVariants}
         >
           Your Future Starts Here.
-        </motion.h1>
-        <motion.p
+        </Motion.h1>
+        <Motion.p
           className="text-xl text-gray-600 mb-8"
           variants={itemVariants}
         >
           Discover the perfect job or find the ideal talent for your projects
           with our trusted marketplace.
-        </motion.p>
+        </Motion.p>
 
-        <motion.div
+        <Motion.div
           className="flex justify-center gap-4"
           variants={itemVariants}
         >
-          <motion.button
+          <Motion.button
             className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 border border-blue-600"
             variants={buttonVariants}
             whileHover="hover"
@@ -123,8 +122,8 @@ const Banner = () => {
               Why Trust Our Platform?
             </Link>{" "}
             {/* Link to your About/Trust page */}
-          </motion.button>
-          <motion.button
+          </Motion.button>
+          <Motion.button
             className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-300"
             variants={buttonVariants}
             whileHover="hover"
@@ -134,10 +133,10 @@ const Banner = () => {
               Create a Job
             </Link>{" "}
             {/* Link to your Add Job page */}
-          </motion.button>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+          </Motion.button>
+        </Motion.div>
+      </Motion.div>
+    </Motion.div>
   );
 };
 
