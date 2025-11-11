@@ -1,6 +1,13 @@
 @import "tailwindcss";
 @plugin "daisyui";
+/* 1. All Imports MUST come first */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap");
+
+/* 2. Then, all other CSS rules */
+body {
+  font-family: "poppins", sans-serif;
+  /* ... other styles */
+}
 
 body {
   font-family: "poppins", sans-serif;

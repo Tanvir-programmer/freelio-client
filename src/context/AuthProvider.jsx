@@ -60,6 +60,8 @@ const AuthProvider = ({ children }) => {
     signOutUser,
     user,
     loading,
+    // ADDED: Include setUser so it can be accessed by consuming components (like Registration)
+    setUser,
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

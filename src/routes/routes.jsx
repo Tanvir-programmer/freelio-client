@@ -6,6 +6,8 @@ import AcceptTask from "../pages/AcceptTask";
 import Home from "../pages/Home";
 import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
+import Trust from "../components/Trust";
+import Error from "../pages/Error";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +36,13 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Registration></Registration>,
+      },
+      {
+        path: "/trust",
+        element: <Trust></Trust>,
+      },
+      {
+        errorElement: <Error></Error>,
       },
     ],
   },

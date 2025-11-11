@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router"; // Left as 'react-router' per your instruction
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -7,7 +7,9 @@ import { AuthContext } from "../context/AuthContext";
 
 const Registration = () => {
   const navigate = useNavigate();
-  const { createUser, updateUserProfile, signInWithGoogle } =
+
+  // CHANGED: Added user and setUser to the destructuring
+  const { createUser, updateUserProfile, signInWithGoogle, _user, setUser } =
     useContext(AuthContext);
 
   const handleRegister = (e) => {
@@ -16,7 +18,6 @@ const Registration = () => {
     const name = form.name.value;
     const email = form.email.value;
 
-    // Check if photoURL is empty and provide a default one if needed
     let photoURL = form.photoURL.value;
     if (!photoURL) {
       photoURL = "https://i.ibb.co/L8y2w03/default-user.png";
@@ -24,31 +25,27 @@ const Registration = () => {
 
     const password = form.password.value;
 
-    // --- START Password Validation ---
-
-    // 1. Check length
     if (password.length < 6) {
       toast.error("Password must be at least 6 characters long.");
       return;
     }
 
-    // 2. Check for uppercase letter
     if (!/[A-Z]/.test(password)) {
       toast.error("Password must include at least one uppercase letter.");
       return;
     }
 
-    // 3. Check for lowercase letter
     if (!/[a-z]/.test(password)) {
       toast.error("Password must include at least one lowercase letter.");
       return;
     }
 
-    // --- END Password Validation ---
-
     createUser(email, password)
-      .then(() => {
-        return updateUserProfile(name, photoURL);
+      .then((userCredential) => {
+        return updateUserProfile(name, photoURL).then(() => {
+          // CHANGED: Call setUser upon successful profile update
+          setUser(userCredential.user);
+        });
       })
       .then(() => {
         toast.success("Registration successful!");
@@ -61,7 +58,9 @@ const Registration = () => {
   const handleGoogleRegister = (e) => {
     e.preventDefault();
     signInWithGoogle()
-      .then(() => {
+      .then((result) => {
+        // CHANGED: Call setUser after Google sign-in
+        setUser(result.user);
         toast.success("Signed in with Google!");
         navigate("/");
       })
@@ -104,6 +103,7 @@ const Registration = () => {
             name="password"
             className="input"
             placeholder="Password"
+            
           />
 
           <p className="text-blue-500 font-light my-3 text-[14px]">

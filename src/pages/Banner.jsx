@@ -118,7 +118,7 @@ const Banner = () => {
             whileHover="hover"
             whileTap="tap"
           >
-            <Link to="/about" className="block w-full h-full">
+            <Link to="/trust" className="block w-full h-full">
               Why Trust Our Platform?
             </Link>{" "}
             {/* Link to your About/Trust page */}
