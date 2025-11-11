@@ -1,17 +1,14 @@
 import React, { useContext } from "react";
 import { Briefcase, User, DollarSign } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router";
+
 const JobCard = ({ job }) => {
   const { user } = useContext(AuthContext);
   const category = job.category || "Uncategorized";
   const summary = job.summary
     ? job.summary.substring(0, 100) + "..."
     : "Detailed description pending.";
-
-  const handleViewDetails = (id) => {
-    console.log(`--- SIMULATING ROUTING ---`);
-    console.log(`Navigating to Job Details Page for ID: ${id}`);
-  };
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl transition duration-300">
@@ -30,7 +27,7 @@ const JobCard = ({ job }) => {
         <div className="flex justify-between items-center text-sm mb-3">
           <p className="text-gray-600 flex items-center">
             <User className="w-4 h-4 mr-1 text-indigo-500" />
-            {user.displayName}
+            {user ? user.displayName || user.email : "Anonymous User"}
           </p>
           <span className="font-bold text-green-700 flex items-center text-base">
             <DollarSign className="w-4 h-4 mr-1" />
@@ -42,12 +39,12 @@ const JobCard = ({ job }) => {
       </div>
 
       <div className="p-5 border-t border-gray-100">
-        <button
-          onClick={() => handleViewDetails(job._id)}
-          className="w-full py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 shadow-md"
+        <Link
+          to={`/allJobs/${job._id}`}
+          className="w-full p-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 shadow-md"
         >
           View Details
-        </button>
+        </Link>
       </div>
     </div>
   );

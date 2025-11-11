@@ -1,6 +1,6 @@
 import React from "react";
 import { motion as Motion } from "framer-motion";
-import { Link } from "react-router"; // Assuming react-router-dom for navigation
+import { Link } from "react-router";
 
 const Banner = () => {
   // Animation variants for different elements

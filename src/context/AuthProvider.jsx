@@ -27,13 +27,17 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signInWithGoogle = () => {
+  const signInWithGoogle = async () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
+    setUser(result.user);
+    setLoading(false);
+    return result;
   };
 
-  const updateUserProfile = (displayName, photoURL) => {
-    return updateProfile(auth.currentUser, { displayName, photoURL });
+  const updateUserProfile = async (displayName, photoURL) => {
+    await updateProfile(auth.currentUser, { displayName, photoURL });
+    setUser({ ...auth.currentUser }); // update context
   };
 
   const signOutUser = () => {
@@ -46,10 +50,7 @@ const AuthProvider = ({ children }) => {
       setUser(currentUser);
       setLoading(false);
     });
-
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {
@@ -60,9 +61,9 @@ const AuthProvider = ({ children }) => {
     signOutUser,
     user,
     loading,
-    // ADDED: Include setUser so it can be accessed by consuming components (like Registration)
     setUser,
   };
+
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );

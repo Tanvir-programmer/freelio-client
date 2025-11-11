@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Briefcase, Loader, AlertTriangle } from "lucide-react";
 import JobCard from "./JobCard";
-import { AuthContext } from "../context/AuthContext"; // ✅ adjust the path as needed
+import { useNavigate } from "react-router";
+import { AuthContext } from "../context/AuthContext";
 
 const API_URL = "http://localhost:3000/alljobs";
 
@@ -11,18 +12,18 @@ const Alljobs = () => {
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {}, [authLoading, user, navigate]);
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         setIsLoading(true);
         setError(null);
-
         const response = await axios.get(API_URL);
         setJobs(response.data);
       } catch (err) {
-        console.error("Error fetching jobs:", err);
-
         if (err.request) {
           setError(
             "Network Error: Could not connect to the server. Is your backend running on port 3000?"
@@ -34,7 +35,6 @@ const Alljobs = () => {
         setIsLoading(false);
       }
     };
-
     fetchJobs();
   }, []);
 
@@ -68,14 +68,12 @@ const Alljobs = () => {
           <Briefcase className="inline w-8 h-8 text-indigo-500 mr-3" />
           Freelio Job Board ({jobs.length})
         </h1>
-
         <p className="mt-3 text-gray-600 text-lg">
           {user
             ? `Welcome, ${user.displayName || user.email}!`
             : "Browse all available freelance opportunities."}
         </p>
       </header>
-
       <main className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {jobs.length > 0 ? (
           jobs.map((job) => <JobCard key={job._id || job.title} job={job} />)

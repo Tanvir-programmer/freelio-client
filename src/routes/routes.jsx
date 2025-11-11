@@ -8,10 +8,14 @@ import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import Trust from "../components/Trust";
 import Error from "../pages/Error";
+// import JobCard from "../pages/JobCard";
+import PrivateRoute from "./PrivateRoute";
+import JobDetails from "../pages/JobDetails";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayouts></MainLayouts>,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
@@ -19,7 +23,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/alljobs",
-        element: <Alljobs></Alljobs>,
+        element: (
+          <PrivateRoute>
+            <Alljobs></Alljobs>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/addjobs",
@@ -42,7 +50,8 @@ const router = createBrowserRouter([
         element: <Trust></Trust>,
       },
       {
-        errorElement: <Error></Error>,
+        path: "/allJobs/:id",
+        element: <JobDetails />,
       },
     ],
   },
