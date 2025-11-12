@@ -10,8 +10,10 @@ const API_URL = "https://freelio-server.vercel.app/alljobs";
 const Alljobs = () => {
   const { user, loading: authLoading } = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);
+  const [sortedJobs, setSortedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sortOrder, setSortOrder] = useState("newest"); // default sort
   const navigate = useNavigate();
 
   useEffect(() => {}, [authLoading, user, navigate]);
@@ -22,7 +24,11 @@ const Alljobs = () => {
         setIsLoading(true);
         setError(null);
         const response = await axios.get(API_URL);
-        setJobs(response.data);
+        const fetchedJobs = response.data.map((job) => ({
+          ...job,
+          postedAt: job.postedAt ? new Date(job.postedAt) : new Date(),
+        }));
+        setJobs(fetchedJobs);
       } catch (err) {
         if (err.request) {
           setError(
@@ -37,6 +43,15 @@ const Alljobs = () => {
     };
     fetchJobs();
   }, []);
+
+  // Sort jobs whenever jobs or sortOrder changes
+  useEffect(() => {
+    const sorted = [...jobs].sort((a, b) => {
+      if (sortOrder === "newest") return a.postedAt - b.postedAt;
+      else return b.postedAt - a.postedAt;
+    });
+    setSortedJobs(sorted);
+  }, [jobs, sortOrder]);
 
   if (isLoading || authLoading) {
     return (
@@ -73,10 +88,26 @@ const Alljobs = () => {
             ? `Welcome, ${user.displayName || user.email}!`
             : "Browse all available freelance opportunities."}
         </p>
+
+        {/* Sorting Dropdown */}
+        <div className="mt-6 flex justify-center items-center gap-4">
+          <label className="text-gray-700 font-semibold">Sort by Date:</label>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
       </header>
+
       <main className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {jobs.length > 0 ? (
-          jobs.map((job) => <JobCard key={job._id || job.title} job={job} />)
+        {sortedJobs.length > 0 ? (
+          sortedJobs.map((job) => (
+            <JobCard key={job._id || job.title} job={job} />
+          ))
         ) : (
           <EmptyState />
         )}

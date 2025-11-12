@@ -17,7 +17,7 @@ const LatestJobs = () => {
         setIsLoading(true);
         setError(null);
 
-        // 2. Fetch the latest 6 jobs from the backend
+    
         const response = await axios.get(API_URL);
 
         setJobs(response.data);

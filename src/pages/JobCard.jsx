@@ -1,51 +1,37 @@
-import React, { useContext } from "react";
-import { Briefcase, User, DollarSign } from "lucide-react";
-import { AuthContext } from "../context/AuthContext";
+import React from "react";
 import { Link } from "react-router";
 
 const JobCard = ({ job }) => {
-  const { user } = useContext(AuthContext);
-  const category = job.category || "Uncategorized";
-  const summary = job.summary
-    ? job.summary.substring(0, 100) + "..."
-    : "Detailed description pending.";
-
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl transition duration-300">
-      <div className="bg-indigo-600 h-20 flex items-center justify-between p-4 text-white">
-        <h3 className="text-sm font-semibold uppercase tracking-wider">
-          {category}
-        </h3>
-        <Briefcase className="w-6 h-6" />
+    <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200 flex flex-col">
+      {/* Job Image */}
+      <div className="w-full h-40 rounded-lg overflow-hidden mb-4">
+        <img
+          src={
+            job.coverImage ||
+            "https://via.placeholder.com/400x200?text=No+Image"
+          }
+          alt={job.title}
+          className="w-full h-full object-cover"
+        />
       </div>
 
-      <div className="p-5 flex-grow">
-        <h2 className="text-xl font-extrabold text-gray-900 mb-2">
-          {job.title || "Job Title Missing"}
-        </h2>
+      {/* Job Info */}
+      <h3 className="text-lg font-semibold text-gray-800 mb-1">{job.title}</h3>
+      <p className="text-gray-600 mb-1">
+        <strong>Category:</strong> {job.category}
+      </p>
+      <p className="text-gray-600 mb-3 text-sm truncate">{job.summary}</p>
 
-        <div className="flex justify-between items-center text-sm mb-3">
-          <p className="text-gray-600 flex items-center">
-            <User className="w-4 h-4 mr-1 text-indigo-500" />
-            {user ? user.displayName || user.email : "Anonymous User"}
-          </p>
-          <span className="font-bold text-green-700 flex items-center text-base">
-            <DollarSign className="w-4 h-4 mr-1" />
-            {job.salary ? job.salary.toLocaleString() : "Negotiable"}
-          </span>
-        </div>
-
-        <p className="text-gray-700 text-sm mb-4">{summary}</p>
-      </div>
-
-      <div className="p-5 border-t border-gray-100">
-        <Link
-          to={`/allJobs/${job._id}`}
-          className="w-full p-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 shadow-md"
-        >
-          View Details
-        </Link>
-      </div>
+      {/* Link to Job Details */}
+      <Link
+        // FIX APPLIED: Used job._id instead of undefined 'id'
+        // and removed the incorrect ':' from the path value.
+        to={`/allJobs/${job._id}`}
+        className="mt-auto inline-block bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition text-center"
+      >
+        View Details
+      </Link>
     </div>
   );
 };

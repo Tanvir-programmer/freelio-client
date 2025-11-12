@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router";
 import axios from "axios";
 import { Loader, AlertTriangle, Briefcase } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../context/AuthContext";
 
 const JobDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -22,12 +24,12 @@ const JobDetails = () => {
         );
         setJob(response.data);
       } catch (err) {
-        console.error("Error fetching job:", err);
-        if (err.response && err.response.status === 404) {
-          setError("Job not found.");
-        } else {
-          setError("Failed to fetch job details. Please try again.");
-        }
+        console.error(err);
+        setError(
+          err.response?.status === 404
+            ? "Job not found."
+            : "Failed to fetch job details."
+        );
       } finally {
         setLoading(false);
       }
@@ -36,19 +38,34 @@ const JobDetails = () => {
     fetchJob();
   }, [id]);
 
-  const handleAcceptJob = () => {
-    const acceptedJobs = JSON.parse(localStorage.getItem("acceptedJobs")) || [];
-    const alreadyAccepted = acceptedJobs.some((item) => item._id === job._id);
-
-    if (alreadyAccepted) {
-      toast.info("You have already accepted this job!");
+  const handleAcceptJob = async () => {
+    if (!user) {
+      toast.error("You must be logged in to accept a job!");
       return;
     }
 
-    acceptedJobs.push(job);
-    localStorage.setItem("acceptedJobs", JSON.stringify(acceptedJobs));
-    toast.success("Job accepted successfully!");
-    setTimeout(() => navigate("/my-accepted-tasks"), 1500);
+    try {
+      const response = await axios.post(
+        "https://freelio-server.vercel.app/acceptJob",
+        {
+          jobId: job._id,
+          userEmail: user.email,
+          userName: user.displayName,
+        }
+      );
+
+      toast.success(response.data.message);
+
+      // Navigate to accepted tasks page after a short delay
+      setTimeout(() => {
+        navigate("/acceptedtask");
+      }, 1000);
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        err.response?.data?.message || "Failed to accept job. Try again."
+      );
+    }
   };
 
   if (loading) {
@@ -69,6 +86,8 @@ const JobDetails = () => {
     );
   }
 
+  const isPoster = user && job && user.email === job.email;
+
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl shadow-lg mt-10 border border-gray-100">
       <div className="flex items-center gap-3 mb-4">
@@ -77,7 +96,9 @@ const JobDetails = () => {
       </div>
 
       <img
-        src={job.cover || "https://via.placeholder.com/800x400?text=Job+Cover"}
+        src={
+          job.coverImage || "https://via.placeholder.com/800x400?text=Job+Cover"
+        }
         alt={job.title}
         className="w-full h-64 object-cover rounded-lg mb-6"
       />
@@ -92,12 +113,21 @@ const JobDetails = () => {
         <strong>Description:</strong> {job.summary}
       </p>
 
-      <button
-        onClick={handleAcceptJob}
-        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200"
-      >
-        Accept Job
-      </button>
+      {isPoster ? (
+        <button
+          disabled
+          className="w-full bg-gray-400 text-white py-2 px-4 rounded-lg cursor-not-allowed"
+        >
+          You posted this job
+        </button>
+      ) : (
+        <button
+          onClick={handleAcceptJob}
+          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200"
+        >
+          Accept Job
+        </button>
+      )}
 
       <ToastContainer position="top-center" autoClose={2000} />
     </div>

@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { AuthContext } from "../context/AuthContext";
 
 const AddJobs = () => {
@@ -38,7 +37,10 @@ const AddJobs = () => {
     }
 
     const postData = {
-      ...jobData,
+      title: jobData.title,
+      category: jobData.category,
+      summary: jobData.summary,
+      coverImage: jobData.cover, // ✅ match backend
       postedBy: user.displayName,
       email: user.email,
       postedAt: new Date().toISOString(),
@@ -64,16 +66,14 @@ const AddJobs = () => {
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-6 grid md:grid-cols-2 gap-10">
-      {/* Form Section */}
+      {/* Form */}
       <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
         <h2 className="text-3xl font-bold text-indigo-600 mb-6 text-center">
           Post a New Job
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Job Title
-            </label>
+            <label className="block text-gray-700 font-semibold mb-2">Job Title</label>
             <input
               type="text"
               name="title"
@@ -84,11 +84,8 @@ const AddJobs = () => {
               required
             />
           </div>
-
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Category
-            </label>
+            <label className="block text-gray-700 font-semibold mb-2">Category</label>
             <select
               name="category"
               value={jobData.category}
@@ -96,17 +93,12 @@ const AddJobs = () => {
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             >
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+                <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
           </div>
-
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Job Summary
-            </label>
+            <label className="block text-gray-700 font-semibold mb-2">Job Summary</label>
             <textarea
               name="summary"
               value={jobData.summary}
@@ -116,11 +108,8 @@ const AddJobs = () => {
               required
             />
           </div>
-
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Cover Image URL
-            </label>
+            <label className="block text-gray-700 font-semibold mb-2">Cover Image URL</label>
             <input
               type="text"
               name="cover"
@@ -130,12 +119,9 @@ const AddJobs = () => {
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             />
           </div>
-
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Posted By
-              </label>
+              <label className="block text-gray-700 font-semibold mb-2">Posted By</label>
               <input
                 type="text"
                 value={user?.displayName || ""}
@@ -144,9 +130,7 @@ const AddJobs = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                User Email
-              </label>
+              <label className="block text-gray-700 font-semibold mb-2">User Email</label>
               <input
                 type="email"
                 value={user?.email || ""}
@@ -155,7 +139,6 @@ const AddJobs = () => {
               />
             </div>
           </div>
-
           <button
             type="submit"
             disabled={loading}
@@ -166,30 +149,17 @@ const AddJobs = () => {
         </form>
       </div>
 
-      {/* Live Preview Section */}
+      {/* Live Preview */}
       <div className="bg-gray-50 p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col">
-        <h3 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Live Preview
-        </h3>
+        <h3 className="text-2xl font-bold mb-6 text-center text-gray-800">Live Preview</h3>
         <div className="flex flex-col gap-4">
           <div className="p-4 border rounded-lg bg-white shadow-sm">
-            <h4 className="text-xl font-semibold text-indigo-600">
-              {jobData.title || "Job Title"}
-            </h4>
-            <p className="text-gray-600">
-              <strong>Category:</strong> {jobData.category}
-            </p>
-            <p className="text-gray-600 mt-2">
-              {jobData.summary || "Job summary will appear here..."}
-            </p>
-            {jobData.cover && (
-              <img
-                src={jobData.cover}
-                alt="Cover"
-                className="mt-4 rounded-md max-h-64 object-cover w-full"
-              />
-            )}
-            {!jobData.cover && (
+            <h4 className="text-xl font-semibold text-indigo-600">{jobData.title || "Job Title"}</h4>
+            <p className="text-gray-600"><strong>Category:</strong> {jobData.category}</p>
+            <p className="text-gray-600 mt-2">{jobData.summary || "Job summary will appear here..."}</p>
+            {jobData.cover ? (
+              <img src={jobData.cover} alt="Cover" className="mt-4 rounded-md max-h-64 object-cover w-full" />
+            ) : (
               <div className="mt-4 h-40 bg-gray-200 rounded-md flex items-center justify-center text-gray-400">
                 Cover image preview
               </div>
