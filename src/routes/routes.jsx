@@ -8,50 +8,59 @@ import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import Trust from "../components/Trust";
 import Error from "../pages/Error";
-// import JobCard from "../pages/JobCard";
 import PrivateRoute from "./PrivateRoute";
 import JobDetails from "../pages/JobDetails";
+import UpdateJob from "../pages/UpdateJob"; // ✅ Import UpdateJob
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayouts></MainLayouts>,
+    element: <MainLayouts />,
     errorElement: <Error />,
     children: [
       {
         path: "/",
-        element: <Home></Home>,
+        element: <Home />,
       },
       {
         path: "/alljobs",
         element: (
           <PrivateRoute>
-            <Alljobs></Alljobs>
+            <Alljobs />
           </PrivateRoute>
         ),
       },
       {
         path: "/addjobs",
-        element: <AddJobs></AddJobs>,
+        element: <AddJobs />,
       },
       {
-        path: "/accepttask",
-        element: <AcceptTask></AcceptTask>,
+        path: "/acceptedtask",
+        element: <AcceptTask />,
       },
       {
         path: "/login",
-        element: <Login></Login>,
+        element: <Login />,
       },
       {
         path: "/register",
-        element: <Registration></Registration>,
+        element: <Registration />,
       },
       {
         path: "/trust",
-        element: <Trust></Trust>,
+        element: <Trust />,
       },
       {
         path: "/allJobs/:id",
         element: <JobDetails />,
+      },
+      {
+        path: "/updateJob/:id", // ✅ New route added
+        element: (
+          <PrivateRoute>
+            <UpdateJob />
+          </PrivateRoute>
+        ),
       },
     ],
   },

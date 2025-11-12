@@ -4,7 +4,7 @@ import { Clock, Loader, AlertTriangle, Briefcase } from "lucide-react";
 
 import JobCard from "../pages/JobCard";
 
-const API_URL = "http://localhost:3000/latestjobs";
+const API_URL = "https://freelio-server.vercel.app/latestjobs";
 
 const LatestJobs = () => {
   const [jobs, setJobs] = useState([]);

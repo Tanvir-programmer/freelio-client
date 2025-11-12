@@ -5,7 +5,7 @@ import JobCard from "./JobCard";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 
-const API_URL = "http://localhost:3000/alljobs";
+const API_URL = "https://freelio-server.vercel.app/alljobs";
 
 const Alljobs = () => {
   const { user, loading: authLoading } = useContext(AuthContext);

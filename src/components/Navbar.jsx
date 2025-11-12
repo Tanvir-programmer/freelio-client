@@ -98,6 +98,9 @@ const Navbar = () => {
           <li className="hover:text-blue-500">
             <NavLink to="/addjobs">Add Jobs</NavLink>
           </li>
+           <li className="hover:text-blue-500">
+            <NavLink to="/acceptedtask">Accepted Task</NavLink>
+          </li>
         </ul>
       </div>
 
