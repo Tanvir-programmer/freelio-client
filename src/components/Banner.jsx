@@ -3,14 +3,13 @@ import { motion as Motion } from "framer-motion";
 import { Link } from "react-router";
 
 const Banner = () => {
-  // Animation variants for different elements
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.3, // Delay between children animations
-        delayChildren: 0.5, // Delay before children animations start
+        staggerChildren: 0.3,
+        delayChildren: 0.5,
       },
     },
   };
@@ -35,7 +34,7 @@ const Banner = () => {
       transition: {
         type: "spring",
         stiffness: 100,
-        delay: 1.2, // Animate buttons a bit later
+        delay: 1.2,
       },
     },
     hover: {
@@ -60,7 +59,6 @@ const Banner = () => {
   };
 
   return (
-    // Main banner container with a subtle gradient and background animation
     <Motion.div
       className="relative overflow-hidden w-full h-[400px] flex items-center justify-center text-center px-4 rounded-xl my-5"
       initial="initial"
@@ -109,7 +107,7 @@ const Banner = () => {
         </Motion.p>
 
         <Motion.div
-          className="flex justify-center gap-4"
+          className="flex justify-center gap-4 flex-col md:flex-row"
           variants={itemVariants}
         >
           <Motion.button
@@ -132,7 +130,6 @@ const Banner = () => {
             <Link to="/addjobs" className="block w-full h-full">
               Create a Job
             </Link>{" "}
-            {/* Link to your Add Job page */}
           </Motion.button>
         </Motion.div>
       </Motion.div>

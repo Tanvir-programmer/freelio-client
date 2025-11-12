@@ -11,6 +11,7 @@ import Error from "../pages/Error";
 import PrivateRoute from "./PrivateRoute";
 import JobDetails from "../pages/JobDetails";
 import UpdateJob from "../pages/UpdateJob"; // ✅ Import UpdateJob
+import Profile from "../components/Profile";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,9 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Registration />,
+      },{
+path: "/profile",
+element: <Profile></Profile>
       },
       {
         path: "/trust",

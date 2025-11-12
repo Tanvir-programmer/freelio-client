@@ -1,0 +1,13 @@
+# Freelio
+
+**Live Site: https://freelio-new.netlify.app/
+
+## Project Overview
+Freelio is a freelance marketplace platform where users can post jobs, accept tasks, and manage their accepted jobs. It provides a simple and intuitive interface for freelancers and clients to collaborate effectively.
+
+## Features
+-Post New Jobs: Users can create and post jobs with a title, category, summary, and cover image.
+-Browse Latest Jobs:** Display the newest freelance jobs in a clean, grid-based layout.
+-Accept Jobs:** Freelancers can accept jobs and view them in their personal “Accepted Tasks” page.
+-Manage Accepted Tasks:** Users can mark tasks as DONE or CANCEL, instantly updating the UI and database.
+-Authentication Integration:** Secure user login with Firebase authentication and personalized dashboards.

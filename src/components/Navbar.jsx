@@ -98,7 +98,7 @@ const Navbar = () => {
           <li className="hover:text-blue-500">
             <NavLink to="/addjobs">Add Jobs</NavLink>
           </li>
-           <li className="hover:text-blue-500">
+          <li className="hover:text-blue-500">
             <NavLink to="/acceptedtask">Accepted Task</NavLink>
           </li>
         </ul>
@@ -144,13 +144,7 @@ const Navbar = () => {
                 >
                   <FiUser className="mr-2" /> Profile
                 </Link>
-                <Link
-                  to="/settings"
-                  className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setDropdownOpen(false)}
-                >
-                  <FiSettings className="mr-2" /> Settings
-                </Link>
+
                 <button
                   onClick={toggleTheme}
                   className="w-full flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
