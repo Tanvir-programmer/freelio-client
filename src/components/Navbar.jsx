@@ -6,11 +6,26 @@ import { AuthContext } from "../context/AuthContext";
 const Navbar = () => {
   const { user, signOutUser, setUser } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Handle click outside dropdown
+  // Theme state
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const darkMode = theme === "dark";
+
+  // Persist theme to <html> and localStorage
+  useEffect(() => {
+    const html = document.querySelector("html");
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  // Toggle theme
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -21,30 +36,6 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Dark mode toggle
-  const toggleTheme = () => {
-    setDarkMode((prev) => {
-      const newMode = !prev;
-      if (newMode) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
-      return newMode;
-    });
-  };
-
-  // Load theme from localStorage on mount
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
-
   const handleLogout = () => {
     signOutUser().then(() => {
       setUser(null);
@@ -53,7 +44,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-white dark:bg-gray-900 shadow-sm px-4">
+    <div className="navbar bg-base-100 dark:bg-gray-900 shadow-sm px-4">
       {/* Left: Logo & Mobile menu */}
       <div className="navbar-start">
         <div className="dropdown">
@@ -75,7 +66,7 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-white dark:bg-gray-800 rounded-box mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 dark:bg-gray-800 rounded-box mt-3 w-52 p-2 shadow"
           >
             <li>
               <NavLink to="/">Home</NavLink>
@@ -86,15 +77,16 @@ const Navbar = () => {
             <li>
               <NavLink to="/addjobs">Add Jobs</NavLink>
             </li>
+            <li>
+              <NavLink to="/acceptedtask">Accepted Task</NavLink>
+            </li>
           </ul>
         </div>
-        <div>
-          <img
-            className="object-cover h-16 w-16 rounded-full"
-            src="https://i.ibb.co/CKbBTDzB/Chat-GPT-Image-Nov-9-2025-09-10-22-AM.png"
-            alt="Logo"
-          />
-        </div>
+        <img
+          className="object-cover h-16 w-16 rounded-full"
+          src="https://i.ibb.co/CKbBTDzB/Chat-GPT-Image-Nov-9-2025-09-10-22-AM.png"
+          alt="Logo"
+        />
       </div>
 
       {/* Center: Desktop Menu */}
@@ -163,11 +155,7 @@ const Navbar = () => {
                   onClick={toggleTheme}
                   className="w-full flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
-                  {darkMode ? (
-                    <FiSun className="mr-2" />
-                  ) : (
-                    <FiMoon className="mr-2" />
-                  )}
+                  {darkMode ? <FiSun className="mr-2" /> : <FiMoon className="mr-2" />}
                   {darkMode ? "Light Mode" : "Dark Mode"}
                 </button>
 
