@@ -66,10 +66,9 @@ const Banner = () => {
       variants={backgroundAnimation}
       style={{
         background: "linear-gradient(270deg, #e0f2f7, #bbdefb, #e3f2fd)", // Soft blue gradient
-        backgroundSize: "200% 200%", // For background position animation
+        backgroundSize: "200% 200%",
       }}
     >
-      {/* Overlay for subtle geometric pattern - purely decorative */}
       <div
         className="absolute inset-0 opacity-20"
         style={{
