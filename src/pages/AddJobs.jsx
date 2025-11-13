@@ -127,6 +127,7 @@ const AddJobs = () => {
               onChange={handleChange}
               placeholder="Enter image URL"
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              required
             />
           </div>
           <div className="grid grid-cols-2 gap-4">

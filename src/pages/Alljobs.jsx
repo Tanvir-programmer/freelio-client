@@ -14,7 +14,7 @@ const AllJobs = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortOrder, setSortOrder] = useState("newest");
-  const navigate = useNavigate();
+  const _navigate = useNavigate();
 
   useEffect(() => {
     const fetchJobs = async () => {

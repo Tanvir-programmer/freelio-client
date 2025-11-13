@@ -1,13 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
-import {
-  FiLogIn,
-  FiUser,
-  FiSettings,
-  FiLogOut,
-  FiMoon,
-  FiSun,
-} from "react-icons/fi";
+import { FiLogIn, FiUser, FiLogOut, FiMoon, FiSun } from "react-icons/fi";
 import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
@@ -17,6 +10,7 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
+  // Handle click outside dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -27,6 +21,30 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Dark mode toggle
+  const toggleTheme = () => {
+    setDarkMode((prev) => {
+      const newMode = !prev;
+      if (newMode) {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      }
+      return newMode;
+    });
+  };
+
+  // Load theme from localStorage on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
   const handleLogout = () => {
     signOutUser().then(() => {
       setUser(null);
@@ -34,17 +52,9 @@ const Navbar = () => {
     });
   };
 
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-    if (!darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
-
   return (
-    <div className="navbar bg-base-100 shadow-sm px-4">
+    <div className="navbar bg-white dark:bg-gray-900 shadow-sm px-4">
+      {/* Left: Logo & Mobile menu */}
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -65,15 +75,15 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-white dark:bg-gray-800 rounded-box mt-3 w-52 p-2 shadow"
           >
-            <li className="hover:text-blue-500">
+            <li>
               <NavLink to="/">Home</NavLink>
             </li>
-            <li className="hover:text-blue-500">
+            <li>
               <NavLink to="/alljobs">All Jobs</NavLink>
             </li>
-            <li className="hover:text-blue-500">
+            <li>
               <NavLink to="/addjobs">Add Jobs</NavLink>
             </li>
           </ul>
@@ -87,23 +97,25 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Center: Desktop Menu */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li className="hover:text-blue-500">
+          <li>
             <NavLink to="/">Home</NavLink>
           </li>
-          <li className="hover:text-blue-500">
+          <li>
             <NavLink to="/alljobs">All Jobs</NavLink>
           </li>
-          <li className="hover:text-blue-500">
+          <li>
             <NavLink to="/addjobs">Add Jobs</NavLink>
           </li>
-          <li className="hover:text-blue-500">
+          <li>
             <NavLink to="/acceptedtask">Accepted Task</NavLink>
           </li>
         </ul>
       </div>
 
+      {/* Right: Auth & Dark Mode */}
       <div className="navbar-end">
         {!user && (
           <>
@@ -137,6 +149,7 @@ const Navbar = () => {
                 <div className="px-4 py-2 text-gray-700 dark:text-gray-200 border-b">
                   {user.displayName || user.email}
                 </div>
+
                 <Link
                   to="/profile"
                   className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -145,6 +158,7 @@ const Navbar = () => {
                   <FiUser className="mr-2" /> Profile
                 </Link>
 
+                {/* Dark Mode Toggle */}
                 <button
                   onClick={toggleTheme}
                   className="w-full flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -153,9 +167,10 @@ const Navbar = () => {
                     <FiSun className="mr-2" />
                   ) : (
                     <FiMoon className="mr-2" />
-                  )}{" "}
+                  )}
                   {darkMode ? "Light Mode" : "Dark Mode"}
                 </button>
+
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
