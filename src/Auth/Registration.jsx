@@ -113,13 +113,14 @@ const Registration = () => {
           {/* Photo URL */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Photo URL (Optional)
+              Photo URL
             </label>
             <input
               type="url"
               name="photoURL"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Paste image URL here"
+              required
             />
           </div>
 
@@ -132,7 +133,7 @@ const Registration = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 pr-10"
-              placeholder="Minimum 6 characters, includes upper and lower case"
+              placeholder="Enter Your Password"
               required
             />
             <button
