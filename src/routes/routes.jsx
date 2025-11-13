@@ -12,6 +12,7 @@ import PrivateRoute from "./PrivateRoute";
 import JobDetails from "../pages/JobDetails";
 import UpdateJob from "../pages/UpdateJob"; // ✅ Import UpdateJob
 import Profile from "../components/Profile";
+import DeleteJob from "../pages/DeleteJob";
 
 const router = createBrowserRouter([
   {
@@ -54,9 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Registration />,
-      },{
-path: "/profile",
-element: <Profile></Profile>
+      },
+      {
+        path: "/profile",
+        element: <Profile></Profile>,
       },
       {
         path: "/trust",
@@ -75,6 +77,14 @@ element: <Profile></Profile>
         element: (
           <PrivateRoute>
             <UpdateJob />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/deleteJob/:id",
+        element: (
+          <PrivateRoute>
+            <DeleteJob />
           </PrivateRoute>
         ),
       },

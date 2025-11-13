@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, Link } from "react-router";
 import axios from "axios";
 import { Loader, AlertTriangle, Briefcase } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
@@ -34,7 +34,6 @@ const JobDetails = () => {
         setLoading(false);
       }
     };
-
     fetchJob();
   }, [id]);
 
@@ -43,7 +42,6 @@ const JobDetails = () => {
       toast.error("You must be logged in to accept a job!");
       return;
     }
-
     try {
       const response = await axios.post(
         "https://freelio-server.vercel.app/acceptJob",
@@ -53,18 +51,35 @@ const JobDetails = () => {
           userName: user.displayName,
         }
       );
-
       toast.success(response.data.message);
-
-      // Navigate to accepted tasks page after a short delay
-      setTimeout(() => {
-        navigate("/acceptedtask");
-      }, 1000);
+      setTimeout(() => navigate("/acceptedtask"), 1000);
     } catch (err) {
       console.error(err);
       toast.error(
         err.response?.data?.message || "Failed to accept job. Try again."
       );
+    }
+  };
+
+  const handleDeleteJob = async () => {
+    if (!user || job.email !== user.email) {
+      toast.error("You can only delete your own job!");
+      return;
+    }
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this job?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const response = await axios.delete(
+        `https://freelio-server.vercel.app/deleteJob/${job._id}`
+      );
+      toast.success(response.data.message);
+      setTimeout(() => navigate("/alljobs"), 1000);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Failed to delete job");
     }
   };
 
@@ -114,12 +129,20 @@ const JobDetails = () => {
       </p>
 
       {isPoster ? (
-        <button
-          disabled
-          className="w-full bg-gray-400 text-white py-2 px-4 rounded-lg cursor-not-allowed"
-        >
-          You posted this job
-        </button>
+        <div className="flex flex-col gap-3">
+          <Link
+            to={`/updatejob/${job._id}`}
+            className="w-full block text-center bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200"
+          >
+            Update Job
+          </Link>
+          <button
+            onClick={handleDeleteJob}
+            className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200"
+          >
+            Delete Job
+          </button>
+        </div>
       ) : (
         <button
           onClick={handleAcceptJob}

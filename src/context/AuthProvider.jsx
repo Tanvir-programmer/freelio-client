@@ -35,9 +35,11 @@ const AuthProvider = ({ children }) => {
     return result;
   };
 
-  const updateUserProfile = async (displayName, photoURL) => {
-    await updateProfile(auth.currentUser, { displayName, photoURL });
-    setUser({ ...auth.currentUser }); // update context
+  const updateUserProfile = (name, photoURL) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photoURL,
+    });
   };
 
   const signOutUser = () => {

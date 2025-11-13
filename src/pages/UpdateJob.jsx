@@ -10,25 +10,28 @@ const UpdateJob = () => {
     title: "",
     category: "",
     summary: "",
-    cover: "",
+    coverImage: "",
   });
 
+  // ✅ Fetch existing job data
   useEffect(() => {
-    fetch(`https://your-api.vercel.app/allJobs/${id}`)
+    fetch(`https://freelio-server.vercel.app/allJobs/${id}`)
       .then((res) => res.json())
       .then((data) => setJob(data))
       .catch(() => toast.error("Failed to load job details"));
   }, [id]);
 
+  // ✅ Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setJob({ ...job, [name]: value });
   };
 
+  // ✅ Update job in backend
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`https://your-api.vercel.app/allJobs/${id}`, {
-      method: "PATCH",
+    fetch(`https://freelio-server.vercel.app/updateJob/${id}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(job),
     })
@@ -41,8 +44,11 @@ const UpdateJob = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Update Job</h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-lg mt-10 border border-gray-100">
+      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">
+        Update Job
+      </h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -50,7 +56,7 @@ const UpdateJob = () => {
           value={job.title}
           onChange={handleChange}
           placeholder="Job Title"
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded-lg"
         />
         <input
           type="text"
@@ -58,30 +64,31 @@ const UpdateJob = () => {
           value={job.category}
           onChange={handleChange}
           placeholder="Category"
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded-lg"
         />
         <textarea
           name="summary"
           value={job.summary}
           onChange={handleChange}
           placeholder="Summary"
-          className="w-full p-2 border rounded h-24"
+          className="w-full p-2 border rounded-lg h-24"
         />
         <input
           type="text"
-          name="cover"
-          value={job.cover}
+          name="coverImage"
+          value={job.coverImage}
           onChange={handleChange}
           placeholder="Cover Image URL"
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded-lg"
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 w-full transition"
         >
           Update Job
         </button>
       </form>
+
       <ToastContainer position="top-center" autoClose={2000} />
     </div>
   );

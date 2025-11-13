@@ -6,8 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { _user, setUser, signInUser, signInWithGoogle } =
-    useContext(AuthContext);
+  const { signInUser, setUser, signInWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
@@ -42,60 +41,109 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center">
-      <form onSubmit={handleEmailLogin}>
-        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 mt-4">
-          <legend className="fieldset-legend text-center text-lg">Login</legend>
+    <div className="min-h-screen flex justify-center items-center bg-gray-50 px-4">
+      <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-lg border-t-8 border-indigo-600">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">
+          Welcome Back
+        </h2>
 
-          <label className="label">Email</label>
-          <input
-            name="email"
-            type="email"
-            className="input"
-            placeholder="Email"
-          />
-
-          <label className="label">Password</label>
-          <div className="relative">
+        <form onSubmit={handleEmailLogin} className="space-y-4">
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
             <input
-              name="password"
-              type={showPassword ? "text" : "password"}
-              className="input w-full pr-10"
-              placeholder="Password"
+              name="email"
+              type="email"
+              required
+              placeholder="Enter your email"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
             />
-            <button
-              type="button"
-              className="absolute inset-y-0 right-0 pr-3"
-              onClick={togglePasswordVisibility}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
           </div>
 
-          <p className="text-blue-500 font-light my-3 text-[14px]">
-            Did not have Account?{" "}
-            <Link className="underline" to="/register">
+          {/* Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="Enter your password"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 pr-12"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 text-sm"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+
+            {/* Forgot Password (UI only) */}
+            <div className="text-right mt-2">
+              <button
+                type="button"
+                className="text-sm text-indigo-600 hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
+          </div>
+
+          {/* Login Button */}
+          <button
+            type="submit"
+            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md"
+          >
+            Login
+          </button>
+
+          {/* Divider */}
+          <div className="divider text-gray-400">OR</div>
+
+          {/* Google Login */}
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center py-3 border border-gray-300 bg-white text-gray-700 font-semibold rounded-lg hover:bg-gray-100 transition duration-300 shadow-sm"
+          >
+            <img
+              src="https://img.icons8.com/color/48/000000/google-logo.png"
+              alt="Google logo"
+              className="h-5 mr-2"
+            />
+            Continue with Google
+          </button>
+
+          {/* Register Link */}
+          <p className="text-center text-sm mt-4 text-gray-600">
+            Don’t have an account?{" "}
+            <Link
+              to="/register"
+              className="text-indigo-600 font-medium hover:underline"
+            >
               Register
             </Link>
           </p>
+        </form>
 
-          <button className="btn btn-neutral mt-4">Login</button>
-
-          <button
-            className="btn btn-success my-1 bg-[#f8f8f8] text-black border-1 hover:bg-gray-400"
-            onClick={handleGoogleLogin}
-          >
-            <img
-              className="h-[25px]"
-              src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
-              alt="Google"
-            />
-            Continue With Google
-          </button>
-
-          <ToastContainer />
-        </fieldset>
-      </form>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </div>
     </div>
   );
 };

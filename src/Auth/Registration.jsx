@@ -1,12 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
+import { reload } from "firebase/auth"; // ✅ import reload
+
 const Registration = () => {
   const navigate = useNavigate();
-  const { createUser, updateUserProfile, signInWithGoogle, _user, setUser } =
+  const { createUser, updateUserProfile, signInWithGoogle, setUser } =
     useContext(AuthContext);
-  const handleRegister = (e) => {
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+
+  const handleRegister = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
@@ -16,6 +23,8 @@ const Registration = () => {
       photoURL = "https://i.ibb.co/L8y2w03/default-user.png";
     }
     const password = form.password.value;
+
+    // ✅ Password validation
     if (password.length < 6) {
       toast.error("Password must be at least 6 characters long.");
       return;
@@ -28,34 +37,44 @@ const Registration = () => {
       toast.error("Password must include at least one lowercase letter.");
       return;
     }
-    createUser(email, password)
-      .then((userCredential) => {
-        const firebaseUser = userCredential.user;
-        return updateUserProfile(name, photoURL).then(() => {
-          setUser({ ...firebaseUser, displayName: name, photoURL: photoURL });
-        });
-      })
-      .then(() => {
-        toast.success("Registration successful!");
-        form.reset();
-        setTimeout(() => navigate("/"), 1500);
-      })
-      .catch((err) => toast.error(err.message));
+
+    try {
+      const userCredential = await createUser(email, password);
+      const firebaseUser = userCredential.user;
+
+      // ✅ Update user profile in Firebase
+      await updateUserProfile(name, photoURL);
+
+      // ✅ Reload Firebase user to reflect new data
+      await reload(firebaseUser);
+
+      // ✅ Update context with refreshed user data
+      setUser({ ...firebaseUser, displayName: name, photoURL });
+
+      toast.success("Registration successful!");
+      form.reset();
+
+      // Redirect after short delay
+      setTimeout(() => navigate("/"), 1500);
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
-  const handleGoogleRegister = (e) => {
+
+  const handleGoogleRegister = async (e) => {
     e.preventDefault();
-    signInWithGoogle()
-      .then((result) => {
-        setUser(result.user);
-        toast.success("Signed in with Google!");
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err.code !== "auth/popup-closed-by-user") {
-          toast.error(err.message);
-        }
-      });
+    try {
+      const result = await signInWithGoogle();
+      setUser(result.user);
+      toast.success("Signed in with Google!");
+      navigate("/");
+    } catch (err) {
+      if (err.code !== "auth/popup-closed-by-user") {
+        toast.error(err.message);
+      }
+    }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 border-t-8 border-indigo-600">
@@ -63,18 +82,21 @@ const Registration = () => {
           Create Account
         </h2>
         <form onSubmit={handleRegister} className="space-y-4">
+          {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Name
             </label>
             <input
-              type="name"
+              type="text"
               name="name"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Full Name"
               required
             />
           </div>
+
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
@@ -87,6 +109,8 @@ const Registration = () => {
               required
             />
           </div>
+
+          {/* Photo URL */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Photo URL (Optional)
@@ -98,18 +122,29 @@ const Registration = () => {
               placeholder="Paste image URL here"
             />
           </div>
-          <div>
+
+          {/* Password with Show/Hide */}
+          <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 pr-10"
               placeholder="Minimum 6 characters, includes upper and lower case"
               required
             />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-3 top-10 text-gray-500 hover:text-indigo-600 text-sm"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
           </div>
+
+          {/* Submit */}
           <button
             type="submit"
             className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md"
@@ -117,6 +152,8 @@ const Registration = () => {
             Register
           </button>
         </form>
+
+        {/* Google Sign-in */}
         <div className="mt-6">
           <button
             className="w-full flex items-center justify-center py-3 border border-gray-300 bg-white text-gray-700 font-semibold rounded-lg hover:bg-gray-100 transition duration-300 shadow-sm"
@@ -131,8 +168,10 @@ const Registration = () => {
             Continue With Google
           </button>
         </div>
+
+        {/* Login link */}
         <p className="text-center text-sm mt-4 text-gray-600">
-          Already have an Account?
+          Already have an Account?{" "}
           <Link
             className="text-indigo-600 font-medium hover:underline"
             to="/login"
@@ -141,6 +180,7 @@ const Registration = () => {
           </Link>
         </p>
       </div>
+
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
@@ -155,4 +195,5 @@ const Registration = () => {
     </div>
   );
 };
+
 export default Registration;

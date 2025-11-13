@@ -5,18 +5,16 @@ import JobCard from "./JobCard";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 
-const API_URL = "https://freelio-server.vercel.app/alljobs";
+const API_URL = "https://freelio-server.vercel.app/allJobs";
 
-const Alljobs = () => {
+const AllJobs = () => {
   const { user, loading: authLoading } = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);
   const [sortedJobs, setSortedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sortOrder, setSortOrder] = useState("newest"); // default sort
+  const [sortOrder, setSortOrder] = useState("newest");
   const navigate = useNavigate();
-
-  useEffect(() => {}, [authLoading, user, navigate]);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -24,16 +22,15 @@ const Alljobs = () => {
         setIsLoading(true);
         setError(null);
         const response = await axios.get(API_URL);
+        // Convert postedAt to Date (fallback to epoch so missing dates are treated oldest)
         const fetchedJobs = response.data.map((job) => ({
           ...job,
-          postedAt: job.postedAt ? new Date(job.postedAt) : new Date(),
+          postedAt: job.postedAt ? new Date(job.postedAt) : new Date(0),
         }));
         setJobs(fetchedJobs);
       } catch (err) {
         if (err.request) {
-          setError(
-            "Network Error: Could not connect to the server. Is your backend running on port 3000?"
-          );
+          setError("Network Error: Could not connect to the server.");
         } else {
           setError(`Failed to retrieve data: ${err.message}`);
         }
@@ -41,14 +38,28 @@ const Alljobs = () => {
         setIsLoading(false);
       }
     };
-    fetchJobs();
-  }, []);
 
-  // Sort jobs whenever jobs or sortOrder changes
+    fetchJobs();
+  }, [API_URL]);
+
   useEffect(() => {
+    // defensive copy so we don't mutate state directly
     const sorted = [...jobs].sort((a, b) => {
-      if (sortOrder === "newest") return a.postedAt - b.postedAt;
-      else return b.postedAt - a.postedAt;
+      const aT =
+        a.postedAt instanceof Date
+          ? a.postedAt.getTime()
+          : new Date(a.postedAt).getTime();
+      const bT =
+        b.postedAt instanceof Date
+          ? b.postedAt.getTime()
+          : new Date(b.postedAt).getTime();
+      if (sortOrder === "newest") {
+        // Newest first -> larger timestamps come first
+        return bT - aT;
+      } else {
+        // Oldest first -> smaller timestamps come first
+        return aT - bT;
+      }
     });
     setSortedJobs(sorted);
   }, [jobs, sortOrder]);
@@ -89,7 +100,6 @@ const Alljobs = () => {
             : "Browse all available freelance opportunities."}
         </p>
 
-        {/* Sorting Dropdown */}
         <div className="mt-6 flex justify-center items-center gap-4">
           <label className="text-gray-700 font-semibold">Sort by Date:</label>
           <select
@@ -97,8 +107,8 @@ const Alljobs = () => {
             onChange={(e) => setSortOrder(e.target.value)}
             className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
+            <option value="newest">Newest </option>
+            <option value="oldest">Oldest </option>
           </select>
         </div>
       </header>
@@ -127,4 +137,4 @@ const EmptyState = () => (
   </div>
 );
 
-export default Alljobs;
+export default AllJobs;

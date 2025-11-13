@@ -11,14 +11,21 @@ const AcceptTask = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch accepted jobs for the logged-in user
+  // Fetch accepted jobs for logged-in user
   const fetchAcceptedJobs = async () => {
+    if (!user?.email) return;
+
     try {
       setLoading(true);
       const response = await axios.get(
         `https://freelio-server.vercel.app/accepted-jobs?email=${user.email}`
       );
-      setJobs(response.data);
+      // Ensure _id is a string
+      const jobsWithStringId = response.data.map(job => ({
+        ...job,
+        _id: job._id.toString()
+      }));
+      setJobs(jobsWithStringId);
       setError("");
     } catch (err) {
       console.error(err);
@@ -29,7 +36,7 @@ const AcceptTask = () => {
   };
 
   useEffect(() => {
-    if (user?.email) fetchAcceptedJobs();
+    fetchAcceptedJobs();
   }, [user]);
 
   // Mark job as DONE
@@ -40,8 +47,8 @@ const AcceptTask = () => {
         { email: user.email }
       );
       toast.success("Job marked as DONE!");
-      // Remove the job from UI instantly
-      setJobs((prev) => prev.filter((job) => job._id !== jobId));
+      // Remove from UI instantly
+      setJobs(prev => prev.filter(job => job._id !== jobId));
     } catch (err) {
       console.error(err);
       toast.error("Failed to mark job as done.");
@@ -56,8 +63,8 @@ const AcceptTask = () => {
         { email: user.email }
       );
       toast.success("Job cancelled!");
-      // Remove the job from UI instantly
-      setJobs((prev) => prev.filter((job) => job._id !== jobId));
+      // Remove from UI instantly
+      setJobs(prev => prev.filter(job => job._id !== jobId));
     } catch (err) {
       console.error(err);
       toast.error("Failed to cancel job.");
@@ -86,15 +93,13 @@ const AcceptTask = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {jobs.map((job) => (
+      {jobs.map(job => (
         <div
           key={job._id}
           className="bg-white p-4 rounded-xl shadow-md border border-gray-200 flex flex-col justify-between"
         >
           <div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">
-              {job.title}
-            </h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">{job.title}</h2>
             <p className="text-gray-600 mb-1">
               <strong>Category:</strong> {job.category}
             </p>
