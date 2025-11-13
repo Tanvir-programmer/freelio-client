@@ -125,30 +125,32 @@ const AcceptTask = () => {
       ))}
 
       {/* Confirmation Modal */}
-      {modalJobId && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-            <h2 className="text-xl font-bold mb-4">Confirm Cancellation</h2>
-            <p className="mb-6 text-gray-700">
-              Are you sure you want to cancel this job? This action cannot be undone.
-            </p>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => cancelJob(modalJobId)}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-              >
-                Yes, Cancel
-              </button>
-              <button
-                onClick={() => setModalJobId(null)}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition flex items-center gap-1"
-              >
-                <X className="w-4 h-4" /> No
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+     {modalJobId && (
+  <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="absolute inset-0 bg-white/20 backdrop-blur-sm"></div>
+    <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center z-10">
+      <h2 className="text-xl font-bold mb-4">Confirm Cancellation</h2>
+      <p className="mb-6 text-gray-700">
+        Are you sure you want to cancel this job? This action cannot be undone.
+      </p>
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={() => cancelJob(modalJobId)}
+          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+        >
+          Yes, Cancel
+        </button>
+        <button
+          onClick={() => setModalJobId(null)}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition flex items-center gap-1"
+        >
+          <X className="w-4 h-4" /> No
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 
       <ToastContainer position="top-center" autoClose={1500} />
     </div>
