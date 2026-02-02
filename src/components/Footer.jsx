@@ -5,11 +5,9 @@ const Footer = () => {
     <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content items-center p-4">
       <aside className="grid-flow-col items-center ">
         <div className="rounded-full bg-gray-800 p-1">
-          <img
-            className="rounded-full h-16 w-16"
-            src="https://i.ibb.co/CKbBTDzB/Chat-GPT-Image-Nov-9-2025-09-10-22-AM.png"
-            alt=""
-          />
+          <div className="font-bold text-2xl">
+            Free<span className="text-indigo-600 font-bold text-2xl">lio</span>
+          </div>
         </div>
         <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
       </aside>

@@ -82,16 +82,19 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        <img
+        {/* <img
           className="object-cover h-16 w-16 rounded-full"
           src="https://i.ibb.co/CKbBTDzB/Chat-GPT-Image-Nov-9-2025-09-10-22-AM.png"
           alt="Logo"
-        />
+        /> */}
+        <div className="font-bold text-2xl">
+          Free<span className="text-indigo-600 font-bold text-2xl">lio</span>
+        </div>
       </div>
 
       {/* Center: Desktop Menu */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 font-bold text-lg space-x-4 text-primary">
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
@@ -155,7 +158,11 @@ const Navbar = () => {
                   onClick={toggleTheme}
                   className="w-full flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
-                  {darkMode ? <FiSun className="mr-2" /> : <FiMoon className="mr-2" />}
+                  {darkMode ? (
+                    <FiSun className="mr-2" />
+                  ) : (
+                    <FiMoon className="mr-2" />
+                  )}
                   {darkMode ? "Light Mode" : "Dark Mode"}
                 </button>
 
