@@ -1,31 +1,44 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
-import { FiLogIn, FiUser, FiLogOut, FiMoon, FiSun } from "react-icons/fi";
+import {
+  FiLogIn,
+  FiUser,
+  FiLogOut,
+  FiMoon,
+  FiSun,
+  FiMenu,
+  FiX,
+} from "react-icons/fi";
 import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const { user, signOutUser, setUser } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Theme state
+  // Theme Management
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-  const darkMode = theme === "dark";
+  const isDarkMode = theme === "dark";
 
-  // Persist theme to <html> and localStorage
   useEffect(() => {
-    const html = document.querySelector("html");
+    const html = document.documentElement;
     html.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
+
+    // Sync Tailwind dark class if using Tailwind's dark mode strategy
+    if (theme === "dark") {
+      html.classList.add("dark");
+    } else {
+      html.classList.remove("dark");
+    }
   }, [theme]);
 
-  // Toggle theme
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
-  // Close dropdown on outside click
+  // Event Listener for clicks outside the profile dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -36,148 +49,158 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    signOutUser().then(() => {
+  const handleLogout = async () => {
+    try {
+      await signOutUser();
       setUser(null);
+      setDropdownOpen(false);
       navigate("/login");
-    });
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "All Jobs", path: "/alljobs" },
+    { name: "Add Jobs", path: "/addjobs" },
+    { name: "Accepted Task", path: "/acceptedtask" },
+    { name: "About Us", path: "/about" },
+  ];
+
+  const activeLinkStyle = ({ isActive }) =>
+    `transition-colors duration-200 font-medium ${isActive ? "text-indigo-600 dark:text-indigo-400" : "hover:text-indigo-500"}`;
+
   return (
-    <div className="navbar bg-base-100 dark:bg-gray-900 shadow-sm px-4">
-      {/* Left: Logo & Mobile menu */}
+    <nav className="navbar bg-base-100 dark:bg-gray-900 shadow-md px-4 md:px-8 sticky top-0 z-50">
+      {/* Branding */}
       <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
-            </svg>
-          </div>
-          <ul
-            tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 dark:bg-gray-800 rounded-box mt-3 w-52 p-2 shadow"
-          >
-            <li>
-              <NavLink to="/">Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/alljobs">All Jobs</NavLink>
-            </li>
-            <li>
-              <NavLink to="/addjobs">Add Jobs</NavLink>
-            </li>
-            <li>
-              <NavLink to="/acceptedtask">Accepted Task</NavLink>
-            </li>
-          </ul>
-        </div>
-        {/* <img
-          className="object-cover h-16 w-16 rounded-full"
-          src="https://i.ibb.co/CKbBTDzB/Chat-GPT-Image-Nov-9-2025-09-10-22-AM.png"
-          alt="Logo"
-        /> */}
-        <div className="font-bold text-2xl">
-          Free<span className="text-indigo-600 font-bold text-2xl">lio</span>
-        </div>
+        <Link
+          to="/"
+          className="text-2xl font-extrabold tracking-tight flex items-center"
+        >
+          Free<span className="text-indigo-600">lio</span>
+        </Link>
       </div>
 
-      {/* Center: Desktop Menu */}
+      {/* Desktop Navigation */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 font-bold text-lg space-x-4 text-primary">
-          <li>
-            <NavLink to="/">Home</NavLink>
-          </li>
-          <li>
-            <NavLink to="/alljobs">All Jobs</NavLink>
-          </li>
-          <li>
-            <NavLink to="/addjobs">Add Jobs</NavLink>
-          </li>
-          <li>
-            <NavLink to="/acceptedtask">Accepted Task</NavLink>
-          </li>
+        <ul className="flex space-x-8 text-sm uppercase tracking-wide">
+          {navLinks.map((link) => (
+            <li key={link.path}>
+              <NavLink to={link.path} className={activeLinkStyle}>
+                {link.name}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </div>
 
-      {/* Right: Auth & Dark Mode */}
-      <div className="navbar-end">
-        {!user && (
-          <>
-            <Link to="/login" className="btn btn-outline mr-2">
-              Login <FiLogIn />
+      {/* Actions (Auth & Theme) */}
+      <div className="navbar-end space-x-3">
+        {!user ? (
+          <div className="flex items-center space-x-2">
+            <Link
+              to="/login"
+              className="btn btn-ghost btn-sm normal-case hidden sm:flex"
+            >
+              Login
             </Link>
             <Link
               to="/register"
-              className="btn btn-primary bg-green-700 hover:bg-green-600"
+              className="btn btn-primary btn-sm normal-case bg-green-700 border-none hover:bg-green-600 px-6"
             >
-              Register <FiLogIn />
+              Get Started
             </Link>
-          </>
-        )}
+          </div>
+        ) : (
+          <div className="flex items-center gap-4">
+            {/* User Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center focus:outline-none transition-transform hover:scale-105"
+              >
+                <img
+                  src={
+                    user.photoURL ||
+                    "https://ui-avatars.com/api/?name=" + user.email
+                  }
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full border-2 border-indigo-500 object-cover shadow-sm"
+                />
+              </button>
 
-        {user && (
-          <div className="relative" ref={dropdownRef}>
-            <button
-              className="flex items-center space-x-2 focus:outline-none"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              <img
-                src={user.photoURL || "https://via.placeholder.com/40"}
-                alt={user.displayName || "User"}
-                className="w-10 h-10 rounded-full cursor-pointer border-2 border-indigo-500"
-              />
-            </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-xl py-2 overflow-hidden animate-in fade-in zoom-in duration-200">
+                  <div className="px-4 py-3 border-b dark:border-gray-700">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Signed in as
+                    </p>
+                    <p className="text-sm font-semibold truncate dark:text-white">
+                      {user.displayName || user.email}
+                    </p>
+                  </div>
 
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border rounded-lg shadow-lg z-50">
-                <div className="px-4 py-2 text-gray-700 dark:text-gray-200 border-b">
-                  {user.displayName || user.email}
+                  <Link
+                    to="/profile"
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <FiUser className="mr-3 text-indigo-500" /> My Profile
+                  </Link>
+
+                  <button
+                    onClick={toggleTheme}
+                    className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700"
+                  >
+                    {isDarkMode ? (
+                      <FiSun className="mr-3 text-yellow-500" />
+                    ) : (
+                      <FiMoon className="mr-3 text-indigo-500" />
+                    )}
+                    {isDarkMode ? "Light Mode" : "Dark Mode"}
+                  </button>
+
+                  <div className="border-t dark:border-gray-700 mt-1">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-gray-700"
+                    >
+                      <FiLogOut className="mr-3" /> Logout
+                    </button>
+                  </div>
                 </div>
-
-                <Link
-                  to="/profile"
-                  className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setDropdownOpen(false)}
-                >
-                  <FiUser className="mr-2" /> Profile
-                </Link>
-
-                {/* Dark Mode Toggle */}
-                <button
-                  onClick={toggleTheme}
-                  className="w-full flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  {darkMode ? (
-                    <FiSun className="mr-2" />
-                  ) : (
-                    <FiMoon className="mr-2" />
-                  )}
-                  {darkMode ? "Light Mode" : "Dark Mode"}
-                </button>
-
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  <FiLogOut className="mr-2" /> Logout
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
+
+        {/* Mobile Toggle Button */}
+        <button
+          className="btn btn-ghost lg:hidden p-1"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        </button>
       </div>
-    </div>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden absolute top-full left-0 w-full bg-base-100 dark:bg-gray-900 border-t shadow-xl py-4 flex flex-col items-center space-y-4 animate-in slide-in-from-top duration-300">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              onClick={() => setMobileMenuOpen(false)}
+              className={activeLinkStyle}
+            >
+              {link.name}
+            </NavLink>
+          ))}
+        </div>
+      )}
+    </nav>
   );
 };
 

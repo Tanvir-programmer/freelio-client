@@ -13,6 +13,7 @@ import JobDetails from "../pages/JobDetails";
 import UpdateJob from "../pages/UpdateJob"; // ✅ Import UpdateJob
 import Profile from "../components/Profile";
 import DeleteJob from "../pages/DeleteJob";
+import AboutUs from "../pages/AboutUs";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
             <AcceptTask />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/about",
+        element: <AboutUs></AboutUs>,
       },
       {
         path: "/login",

@@ -1,19 +1,32 @@
+/* 1️⃣ Tailwind & DaisyUI */
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
+  themes:
+    light --default,
+    dark --prefersdark;
 }
 
-
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-/* 1. All Imports MUST come first */
+/* 2️⃣ Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap");
 
-/* 2. Then, all other CSS rules */
+/* 3️⃣ Dark Variant */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* 4️⃣ Base Styles */
 body {
-  font-family: "poppins", sans-serif;
-  /* ... other styles */
+  font-family: "Poppins", sans-serif;
+  opacity: 0; /* Start invisible */
+  animation: fadeInApp 0.6s ease-out forwards;
 }
 
-body {
-  font-family: "poppins", sans-serif;
+/* 5️⃣ Animation */
+@keyframes fadeInApp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
