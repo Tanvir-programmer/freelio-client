@@ -6,62 +6,62 @@ const AboutUs = () => {
     {
       label: "Active Freelancers",
       value: "10K+",
-      icon: <FiUsers className="text-indigo-600" />,
+      icon: <FiUsers className="text-[#387d61]" />,
     },
     {
       label: "Jobs Completed",
       value: "25K+",
-      icon: <FiCheckCircle className="text-indigo-600" />,
+      icon: <FiCheckCircle className="text-[#387d61]" />,
     },
     {
       label: "Client Satisfaction",
       value: "99%",
-      icon: <FiAward className="text-indigo-600" />,
+      icon: <FiAward className="text-[#387d61]" />,
     },
   ];
 
   return (
-    <div className="bg-base-100 text-base-content min-height-screen">
+    <div className="bg-white text-gray-800">
       {/* Hero Section */}
-      <section className="py-16 bg-[#383497] text-white rounded-2xl">
+      <section className="py-20 bg-gradient-to-br from-[#387d61] to-[#2f684f] text-white rounded-b-3xl">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
             Empowering the Future of Work
           </h1>
           <p className="text-lg opacity-90 max-w-2xl mx-auto">
-            Freelio is the premier destination for connecting world-class talent
-            with innovative companies. We’re building a bridge between ambition
-            and opportunity.
+            Freelio connects world-class talent with innovative companies. We
+            build bridges between ambition and opportunity.
           </p>
         </div>
       </section>
 
-      {/* Mission & Vision */}
+      {/* Mission Section */}
       <section className="py-20 container mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
-              <FiTarget className="text-indigo-600" /> Our Mission
+            <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
+              <FiTarget className="text-[#387d61]" />
+              Our Mission
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-              At <span className="font-bold text-indigo-600">Freelio</span>, our
-              mission is to democratize the global workforce. We believe that
-              talent has no borders, and everyone deserves access to meaningful,
-              professional work regardless of their location.
+            <p className="text-gray-600 leading-relaxed mb-4">
+              At <span className="font-bold text-[#387d61]">Freelio</span>, we
+              believe talent has no borders. Our platform enables freelancers to
+              thrive and businesses to scale efficiently.
             </p>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-              We provide a secure, transparent, and efficient marketplace where
-              freelancers can thrive and businesses can scale with agility.
+            <p className="text-gray-600 leading-relaxed">
+              We focus on transparency, security, and performance — building a
+              trusted digital marketplace.
             </p>
           </div>
+
           <div className="relative">
             <img
               src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
               alt="Team Collaboration"
-              className="rounded-2xl shadow-2xl"
+              className="rounded-3xl shadow-xl"
             />
-            <div className="absolute -bottom-6 -left-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hidden md:block">
-              <p className="text-indigo-600 font-bold text-xl italic">
+            <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg hidden md:block">
+              <p className="text-[#387d61] font-bold text-lg italic">
                 "The best way to predict the future is to create it."
               </p>
             </div>
@@ -70,18 +70,20 @@ const AboutUs = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="bg-gray-50 dark:bg-gray-900 py-16">
+      <section className="bg-[#f3faf7] py-16">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-base-100 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 text-center hover:shadow-md transition-shadow"
+                className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:shadow-md transition"
               >
                 <div className="text-3xl mb-4 flex justify-center">
                   {stat.icon}
                 </div>
-                <div className="text-4xl font-bold mb-2">{stat.value}</div>
+                <div className="text-4xl font-bold mb-2 text-[#387d61]">
+                  {stat.value}
+                </div>
                 <div className="text-gray-500 font-medium">{stat.label}</div>
               </div>
             ))}
@@ -94,56 +96,58 @@ const AboutUs = () => {
         <h2 className="text-3xl font-bold text-center mb-16">
           Why Professionals Choose Freelio
         </h2>
+
         <div className="grid md:grid-cols-3 gap-10">
-          <div className="card bg-base-100">
-            <div className="card-body items-center text-center">
-              <h3 className="card-title text-indigo-600">Verified Talent</h3>
-              <p className="text-sm text-gray-500">
-                Every freelancer on our platform undergoes a rigorous screening
-                process to ensure quality.
-              </p>
-            </div>
+          <div className="p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition text-center">
+            <h3 className="text-xl font-semibold text-[#387d61] mb-3">
+              Verified Talent
+            </h3>
+            <p className="text-gray-500 text-sm">
+              Every freelancer undergoes a screening process to ensure top
+              quality work.
+            </p>
           </div>
-          <div className="card bg-base-100 border-x border-gray-100 dark:border-gray-800">
-            <div className="card-body items-center text-center">
-              <h3 className="card-title text-indigo-600">Secure Payments</h3>
-              <p className="text-sm text-gray-500">
-                Our escrow system ensures that freelancers get paid for their
-                hard work and clients get what they pay for.
-              </p>
-            </div>
+
+          <div className="p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition text-center">
+            <h3 className="text-xl font-semibold text-[#387d61] mb-3">
+              Secure Payments
+            </h3>
+            <p className="text-gray-500 text-sm">
+              Our escrow system protects both clients and freelancers.
+            </p>
           </div>
-          <div className="card bg-base-100">
-            <div className="card-body items-center text-center">
-              <h3 className="card-title text-indigo-600">24/7 Support</h3>
-              <p className="text-sm text-gray-500">
-                Our dedicated support team is always here to help you navigate
-                your journey.
-              </p>
-            </div>
+
+          <div className="p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition text-center">
+            <h3 className="text-xl font-semibold text-[#387d61] mb-3">
+              24/7 Support
+            </h3>
+            <p className="text-gray-500 text-sm">
+              Dedicated support to help you at every stage.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
+      {/* CTA Section */}
       <section className="container mx-auto px-6 pb-20">
-        <div className="bg-indigo-900 rounded-3xl p-10 md:p-20 text-center text-white relative overflow-hidden">
-          <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to start your journey?
-            </h2>
-            <p className="mb-10 opacity-80">
-              Join thousands of companies and freelancers working together.
-            </p>
-            <div className="flex flex-col md:flex-row gap-4 justify-center">
-              <button className="btn btn-primary px-8">Hire Talent</button>
-              <button className="btn btn-outline text-white px-8">
-                Find a Job
-              </button>
-            </div>
+        <div className="bg-[#387d61] rounded-3xl p-12 md:p-20 text-center text-white relative overflow-hidden">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Ready to start your journey?
+          </h2>
+          <p className="mb-10 opacity-90">
+            Join thousands of companies and freelancers working together.
+          </p>
+
+          <div className="flex flex-col md:flex-row gap-4 justify-center">
+            <button className="px-8 py-3 bg-white text-[#387d61] font-semibold rounded-xl hover:bg-gray-100 transition">
+              Hire Talent
+            </button>
+            <button className="px-8 py-3 border border-white text-white font-semibold rounded-xl hover:bg-white hover:text-[#387d61] transition">
+              Find a Job
+            </button>
           </div>
-          {/* Decorative background element */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full filter blur-3xl opacity-20 -mr-20 -mt-20"></div>
+
+          <div className="absolute top-0 right-0 w-72 h-72 bg-white opacity-10 rounded-full blur-3xl -mr-24 -mt-24"></div>
         </div>
       </section>
     </div>

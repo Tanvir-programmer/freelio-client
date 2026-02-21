@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Clock, Loader, AlertTriangle, Briefcase } from "lucide-react";
-
 import JobCard from "../pages/JobCard";
 
 const API_URL = "https://freelio-server.vercel.app/latestjobs";
 
-const LatestJobs = () => {
-  const [jobs, setJobs] = useState([]);
+const LatestJobs = ({ searchTerm = "" }) => {
+  const [allJobs, setAllJobs] = useState([]); // Store master list
+  const [filteredJobs, setFilteredJobs] = useState([]); // Store what we display
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -15,18 +15,12 @@ const LatestJobs = () => {
     const fetchLatestJobs = async () => {
       try {
         setIsLoading(true);
-        setError(null);
-
-    
         const response = await axios.get(API_URL);
-
-        setJobs(response.data);
+        setAllJobs(response.data);
+        setFilteredJobs(response.data); // Initially show all
       } catch (err) {
-        console.error("Error fetching latest jobs:", err);
-
-        setError(
-          "Failed to load featured jobs. Please ensure your Express server is running on port 3000."
-        );
+        setError("Failed to load featured jobs. Please check your connection.");
+        console.log(err);
       } finally {
         setIsLoading(false);
       }
@@ -34,58 +28,65 @@ const LatestJobs = () => {
     fetchLatestJobs();
   }, []);
 
-  // --- Loading State ---
+  // Handle filtering when searchTerm prop changes
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredJobs(allJobs);
+    } else {
+      const filtered = allJobs.filter(
+        (job) =>
+          job.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          job.category?.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      setFilteredJobs(filtered);
+    }
+  }, [searchTerm, allJobs]);
+
   if (isLoading) {
     return (
-      <div className="text-center p-8">
-        <Loader className="w-8 h-8 animate-spin mx-auto text-indigo-600" />
-        <p className="mt-4 text-lg text-gray-700">
-          Loading the newest opportunities...
+      <div className="text-center p-20 bg-[#fdf7f0]">
+        <Loader className="w-10 h-10 animate-spin mx-auto text-[#357266]" />
+        <p className="mt-4 text-[#1e3d37] font-medium">
+          Finding the best matches...
         </p>
       </div>
     );
   }
 
-  // --- Error State ---
   if (error) {
     return (
-      <div className="p-6 text-center bg-red-100 border border-red-300 rounded-lg max-w-lg mx-auto my-8">
-        <AlertTriangle className="w-8 h-8 text-red-600 mx-auto mb-3" />
-        <h3 className="text-xl font-bold text-red-800 mb-2">
-          Data Fetch Error
-        </h3>
-        <p className="text-red-700">{error}</p>
+      <div className="p-12 text-center bg-red-50 max-w-2xl mx-auto my-8 rounded-2xl border border-red-100">
+        <AlertTriangle className="w-10 h-10 text-red-500 mx-auto mb-4" />
+        <p className="text-red-700 font-medium">{error}</p>
       </div>
     );
   }
 
-  // --- Success/Display State ---
   return (
-    <section className="py-12 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="mb-8 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 border-b-2 border-indigo-400 pb-2 inline-flex items-center">
-            <Clock className="w-6 h-6 text-indigo-500 mr-2" />
-            Latest Freelance Jobs
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-20">
+        <header className="mb-12">
+          <h2 className="text-4xl font-bold text-[#1e3d37] flex items-center gap-3">
+            <Clock className="text-[#357266]" size={32} />
+            Latest Opportunities
           </h2>
-          <p className="mt-2 text-lg text-gray-600">
-            The newest 6 opportunities added to the platform.
-          </p>
+          {searchTerm && (
+            <p className="mt-2 text-[#357266] font-medium">
+              Showing results for: "{searchTerm}"
+            </p>
+          )}
         </header>
 
-        <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {jobs.length > 0 ? (
-            jobs.map((job) => <JobCard key={job._id} job={job} />)
+        <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredJobs.length > 0 ? (
+            filteredJobs.map((job) => <JobCard key={job._id} job={job} />)
           ) : (
-            // Empty State if no jobs are found
-            <div className="col-span-full p-10 text-center bg-white rounded-xl shadow-md border border-gray-200">
-              <Briefcase className="w-10 h-10 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-700">
-                No New Jobs
+            <div className="col-span-full py-20 text-center bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+              <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-[#1e3d37]">
+                No jobs found
               </h3>
-              <p className="mt-2 text-gray-500">
-                Check back soon for new opportunities!
-              </p>
+              <p className="text-gray-500">Try searching for something else.</p>
             </div>
           )}
         </main>

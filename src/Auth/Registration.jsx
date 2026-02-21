@@ -2,7 +2,9 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
-import { reload } from "firebase/auth"; // ✅ import reload
+import { reload } from "firebase/auth";
+import { FaUser, FaEnvelope, FaImage, FaLock } from "react-icons/fa";
+import "react-toastify/dist/ReactToastify.css";
 
 const Registration = () => {
   const navigate = useNavigate();
@@ -19,22 +21,23 @@ const Registration = () => {
     const name = form.name.value;
     const email = form.email.value;
     let photoURL = form.photoURL.value;
+    const password = form.password.value;
+
     if (!photoURL) {
       photoURL = "https://i.ibb.co/L8y2w03/default-user.png";
     }
-    const password = form.password.value;
 
-    // ✅ Password validation
+    // Password validation
     if (password.length < 6) {
-      toast.error("Password must be at least 6 characters long.");
+      toast.error("Password must be at least 6 characters.");
       return;
     }
     if (!/[A-Z]/.test(password)) {
-      toast.error("Password must include at least one uppercase letter.");
+      toast.error("Must include at least one uppercase letter.");
       return;
     }
     if (!/[a-z]/.test(password)) {
-      toast.error("Password must include at least one lowercase letter.");
+      toast.error("Must include at least one lowercase letter.");
       return;
     }
 
@@ -42,27 +45,20 @@ const Registration = () => {
       const userCredential = await createUser(email, password);
       const firebaseUser = userCredential.user;
 
-      // ✅ Update user profile in Firebase
       await updateUserProfile(name, photoURL);
-
-      // ✅ Reload Firebase user to reflect new data
       await reload(firebaseUser);
 
-      // ✅ Update context with refreshed user data
       setUser({ ...firebaseUser, displayName: name, photoURL });
 
-      toast.success("Registration successful!");
+      toast.success("Registration successful 🎉");
       form.reset();
-
-      // Redirect after short delay
       setTimeout(() => navigate("/"), 1500);
     } catch (err) {
       toast.error(err.message);
     }
   };
 
-  const handleGoogleRegister = async (e) => {
-    e.preventDefault();
+  const handleGoogleRegister = async () => {
     try {
       const result = await signInWithGoogle();
       setUser(result.user);
@@ -76,123 +72,121 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 border-t-8 border-indigo-600">
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">
-          Create Account
-        </h2>
-        <form onSubmit={handleRegister} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e6f2ed] via-white to-[#dceee7] px-4 py-5">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
+          <p className="text-sm text-gray-500 mt-2">
+            Join us and start managing your projects
+          </p>
+        </div>
+
+        <form onSubmit={handleRegister} className="space-y-5">
           {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Name
-            </label>
+          <div className="relative">
+            <FaUser className="absolute top-4 left-4 text-gray-400" />
             <input
               type="text"
               name="name"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Full Name"
               required
+              placeholder="Full Name"
+              className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl
+              focus:ring-2 focus:ring-[#387d61] focus:border-[#387d61] outline-none"
             />
           </div>
 
           {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
+          <div className="relative">
+            <FaEnvelope className="absolute top-4 left-4 text-gray-400" />
             <input
               type="email"
               name="email"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Email Address"
               required
+              placeholder="Email Address"
+              className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl
+              focus:ring-2 focus:ring-[#387d61] focus:border-[#387d61] outline-none"
             />
           </div>
 
           {/* Photo URL */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Photo URL
-            </label>
+          <div className="relative">
+            <FaImage className="absolute top-4 left-4 text-gray-400" />
             <input
               type="url"
               name="photoURL"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Paste image URL here"
-              required
+              placeholder="Profile Image URL (optional)"
+              className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl
+              focus:ring-2 focus:ring-[#387d61] focus:border-[#387d61] outline-none"
             />
           </div>
 
-          {/* Password with Show/Hide */}
+          {/* Password */}
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
+            <FaLock className="absolute top-4 left-4 text-gray-400" />
             <input
               type={showPassword ? "text" : "password"}
               name="password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 pr-10"
-              placeholder="Enter Your Password"
               required
+              placeholder="Create Password"
+              className="w-full pl-11 pr-20 py-3 border border-gray-300 rounded-xl
+              focus:ring-2 focus:ring-[#387d61] focus:border-[#387d61] outline-none"
             />
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute right-3 top-10 text-gray-500 hover:text-indigo-600 text-sm"
+              className="absolute top-3 right-4 text-sm font-medium text-[#387d61]"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
 
-          {/* Submit */}
+          {/* Register Button */}
           <button
             type="submit"
-            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md"
+            className="w-full py-3 bg-[#387d61] hover:bg-[#2f684f]
+            text-white font-semibold rounded-xl transition duration-300 shadow-md"
           >
             Register
           </button>
-        </form>
 
-        {/* Google Sign-in */}
-        <div className="mt-6">
+          {/* Divider */}
+          <div className="flex items-center gap-4">
+            <div className="flex-1 h-px bg-gray-200"></div>
+            <span className="text-sm text-gray-400">OR</span>
+            <div className="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          {/* Google */}
           <button
-            className="w-full flex items-center justify-center py-3 border border-gray-300 bg-white text-gray-700 font-semibold rounded-lg hover:bg-gray-100 transition duration-300 shadow-sm"
             type="button"
             onClick={handleGoogleRegister}
+            className="w-full flex items-center justify-center gap-3 py-3
+            border border-gray-300 rounded-xl hover:border-[#387d61]
+            hover:bg-[#f3faf7] transition duration-300"
           >
             <img
-              className="h-6 w-6 mr-3"
               src="https://img.icons8.com/color/48/000000/google-logo.png"
-              alt="Google logo"
+              alt="Google"
+              className="h-5"
             />
-            Continue With Google
+            Continue with Google
           </button>
-        </div>
 
-        {/* Login link */}
-        <p className="text-center text-sm mt-4 text-gray-600">
-          Already have an Account?{" "}
-          <Link
-            className="text-indigo-600 font-medium hover:underline"
-            to="/login"
-          >
-            Login
-          </Link>
-        </p>
+          {/* Login Link */}
+          <p className="text-center text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-[#387d61] font-medium hover:underline"
+            >
+              Login
+            </Link>
+          </p>
+        </form>
+
+        <ToastContainer position="bottom-right" autoClose={3000} />
       </div>
-
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   );
 };

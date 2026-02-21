@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion as Motion } from "framer-motion";
-import { Search, MapPin } from "lucide-react"; // Optional: Install lucide-react or use SVGs
+import { Search } from "lucide-react";
+import { NavLink } from "react-router";
 
-const Banner = () => {
+const Banner = ({ onSearch }) => {
+  const [query, setQuery] = useState("");
+
+  const handleSearch = () => {
+    onSearch(query);
+  };
+
   const containerVariants = {
     hidden: { opacity: 0, x: -20 },
     visible: {
@@ -24,7 +31,6 @@ const Banner = () => {
   return (
     <div className="bg-[#fdf7f0] min-h-[600px] flex items-center px-6 lg:px-20 py-12 font-sans overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* LEFT CONTENT */}
         <Motion.div
           variants={containerVariants}
           initial="hidden"
@@ -40,7 +46,6 @@ const Banner = () => {
             most out of your time and cost.
           </Motion.p>
 
-          {/* SEARCH BAR AREA */}
           <Motion.div className="bg-white p-2 rounded-xl shadow-xl flex flex-col md:flex-row items-center border border-gray-100 max-w-2xl">
             <div className="flex items-center px-4 py-2 w-full border-b md:border-b-0 md:border-r border-gray-200">
               <Search className="text-gray-400 mr-2" size={20} />
@@ -48,24 +53,23 @@ const Banner = () => {
                 type="text"
                 placeholder="What are you looking for?"
                 className="outline-none w-full text-gray-700 placeholder-gray-400"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
-            <div className="flex items-center px-4 py-2 w-full">
-              <MapPin className="text-gray-400 mr-2" size={20} />
-              <select className="outline-none w-full text-gray-700 bg-transparent cursor-pointer">
-                <option>City, state, or zip</option>
-              </select>
-            </div>
-            <button className="bg-[#357266] hover:bg-[#2a5a51] text-white px-10 py-4 rounded-lg font-semibold transition-all w-full md:w-auto">
-              Search
+
+            <button
+              onClick={handleSearch}
+              className="bg-[#357266] hover:bg-[#2a5a51] text-white px-10 py-4 rounded-lg font-semibold transition-all w-full md:w-auto"
+            >
+              <NavLink to="alljobs">Search</NavLink>
             </button>
           </Motion.div>
 
-          {/* TRUSTED BY LOGOS */}
           <div className="pt-8">
             <p className="text-gray-400 text-sm mb-4">Trusted by</p>
             <div className="flex flex-wrap gap-8 opacity-60 grayscale">
-              {/* Replace these with actual SVGs/Images from the screenshot */}
               <span className="text-xl font-bold italic text-gray-700 underline decoration-orange-500">
                 amazon
               </span>
@@ -78,9 +82,7 @@ const Banner = () => {
           </div>
         </Motion.div>
 
-        {/* RIGHT IMAGE COLLAGE */}
         <div className="relative h-[500px] w-full hidden md:block">
-          {/* Main Large Image (Middle) */}
           <Motion.div
             variants={imageVariants}
             className="absolute left-0 top-0 w-2/3 h-full rounded-2xl overflow-hidden shadow-2xl z-10"
@@ -91,8 +93,6 @@ const Banner = () => {
               className="w-full h-full object-cover"
             />
           </Motion.div>
-
-          {/* Top Right Small (Pink bg) */}
           <Motion.div
             variants={imageVariants}
             className="absolute right-0 top-0 w-1/3 h-[45%] rounded-2xl overflow-hidden bg-[#fce4ec] z-20 shadow-lg"
@@ -103,8 +103,6 @@ const Banner = () => {
               className="w-full h-full object-cover mix-blend-multiply"
             />
           </Motion.div>
-
-          {/* Bottom Right Small (Blue/White bg) */}
           <Motion.div
             variants={imageVariants}
             className="absolute right-0 bottom-0 w-1/3 h-[50%] rounded-2xl overflow-hidden bg-white z-20 shadow-lg"

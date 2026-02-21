@@ -64,6 +64,7 @@ const Navbar = () => {
     { name: "Add Jobs", path: "/addjobs" },
     { name: "Accepted Task", path: "/acceptedtask" },
     { name: "About Us", path: "/about" },
+    { name: "Contact Us", path: "/contactus" },
   ];
 
   const activeLinkStyle = ({ isActive }) =>
@@ -79,7 +80,10 @@ const Navbar = () => {
           to="/"
           className="text-2xl font-extrabold tracking-tight flex items-center "
         >
-         <NavLink to="/"> Free<span className="text-[#387d61]">lio</span></NavLink>
+          <NavLink to="/">
+            {" "}
+            Free<span className="text-[#387d61]">lio</span>
+          </NavLink>
         </div>
       </div>
 
@@ -102,13 +106,13 @@ const Navbar = () => {
           <div className="flex items-center space-x-2">
             <Link
               to="/login"
-              className="btn btn-ghost btn-sm normal-case hidden sm:flex"
+              className="btn btn-ghost btn-md normal-case hidden sm:flex "
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="btn btn-primary btn-sm normal-case bg-green-700 border-none hover:bg-green-600 px-6"
+              className="btn btn-primary btn-md normal-case bg-[#1f4b3f] border-none hover:bg-[#2a6e5c] px-6"
             >
               Get Started
             </Link>

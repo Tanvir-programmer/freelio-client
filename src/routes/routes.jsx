@@ -15,6 +15,7 @@ import Profile from "../components/Profile";
 import DeleteJob from "../pages/DeleteJob";
 import AboutUs from "../pages/AboutUs";
 import Qna from "../components/Qna";
+import ContactUs from "../pages/ContactUs";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "/qna",
         element: <Qna></Qna>,
+      },
+      {
+        path: "/contactus",
+        element: <ContactUs></ContactUs>,
       },
       {
         path: "/allJobs/:id",

@@ -74,13 +74,23 @@ const TopCategories = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-extrabold text-gray-900 border-b-2 border-orange-400 pb-2 inline-flex items-center">
-            <Sparkles className="w-6 h-6 text-orange-500 mr-2" />
-            Top Job Categories
-          </h2>
-          <p className="mt-2 text-lg text-gray-600">
-            Explore opportunities by skill and industry.
-          </p>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#f3faf7] text-[#387d61] text-sm font-semibold tracking-wide">
+              <Sparkles className="w-4 h-4" />
+              Featured Categories
+            </div>
+
+            <h2 className="mt-6 text-3xl md:text-4xl font-bold text-gray-900">
+              Top Job Categories
+            </h2>
+
+            <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+              Discover high-demand opportunities across various industries and
+              skill sets.
+            </p>
+
+            <div className="mt-6 w-20 h-1 bg-[#387d61] mx-auto rounded-full"></div>
+          </div>
         </motion.header>
 
         {/* Cards Animation */}
