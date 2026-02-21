@@ -1,138 +1,123 @@
 import React from "react";
 import { motion as Motion } from "framer-motion";
-import { Link } from "react-router";
+import { Search, MapPin } from "lucide-react"; // Optional: Install lucide-react or use SVGs
 
 const Banner = () => {
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, x: -20 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-        delayChildren: 0.5,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-      },
-    },
-  };
-
-  const buttonVariants = {
-    hidden: { x: -50, opacity: 0 },
-    visible: {
       x: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        delay: 1.2,
-      },
+      transition: { staggerChildren: 0.2, duration: 0.6 },
     },
-    hover: {
-      scale: 1.05,
-      boxShadow: "0px 0px 8px rgba(0,0,0,0.2)",
-      transition: { duration: 0.3 },
-    },
-    tap: { scale: 0.95 },
   };
 
-  const backgroundAnimation = {
-    initial: { backgroundPosition: "0% 50%" },
-    animate: {
-      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-      transition: {
-        duration: 15,
-        ease: "linear",
-        repeat: Infinity,
-        repeatType: "loop",
-      },
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeOut" },
     },
   };
 
   return (
-    <Motion.div
-      className="relative overflow-hidden w-full h-[400px] flex items-center justify-center text-center px-4 rounded-xl my-5"
-      initial="initial"
-      animate="animate"
-      variants={backgroundAnimation}
-      style={{
-        background: "linear-gradient(270deg, #e0f2f7, #bbdefb, #e3f2fd)", // Soft blue gradient
-        backgroundSize: "200% 200%",
-      }}
-    >
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239bc7e0' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zm0 30v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 30v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0-30V0H4v4H0v2h4v4h2V6h4V4H6zm0 30v-4H4v4H0v2h4v4h2v-4h4v-2H6zm0 30v-4H4v4H0v2h4v4h2v-4h4v-2H6zM36 4v-4h-2v4h-4v2h4v4h2V6h4V4h-4zM6 4v-4H4v4H0v2h4v4h2V6h4V4H6zM36 64v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 64v-4H4v4H0v2h4v4h2v-4h4v-2H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
-          backgroundSize: "300px 300px",
-          animation: "movePattern 60s linear infinite",
-        }}
-      ></div>
-      <style>{`
-        @keyframes movePattern {
-          from { background-position: 0 0; }
-          to { background-position: 300px 300px; }
-        }
-      `}</style>
-
-      <Motion.div
-        className="relative z-10 max-w-4xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <Motion.h1
-          className="text-5xl font-extrabold text-gray-800 mb-4 tracking-tight leading-tight"
-          variants={itemVariants}
-        >
-          Your Future Starts Here.
-        </Motion.h1>
-        <Motion.p
-          className="text-xl text-gray-600 mb-8"
-          variants={itemVariants}
-        >
-          Discover the perfect job or find the ideal talent for your projects
-          with our trusted marketplace.
-        </Motion.p>
-
+    <div className="bg-[#fdf7f0] min-h-[600px] flex items-center px-6 lg:px-20 py-12 font-sans overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* LEFT CONTENT */}
         <Motion.div
-          className="flex justify-center gap-4 flex-col md:flex-row"
-          variants={itemVariants}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="space-y-8"
         >
-          <Motion.button
-            className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 border border-blue-600"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <Link to="/trust" className="block w-full h-full">
-              Why Trust Our Platform?
-            </Link>{" "}
-            {/* Link to your About/Trust page */}
-          </Motion.button>
-          <Motion.button
-            className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-300"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <Link to="/addjobs" className="block w-full h-full">
-              Create a Job
-            </Link>{" "}
-          </Motion.button>
+          <Motion.h1 className="text-5xl lg:text-7xl font-bold text-[#1e3d37] leading-tight">
+            Hire Experts & Get Your <br /> Any Job Done
+          </Motion.h1>
+
+          <Motion.p className="text-gray-500 text-lg max-w-md leading-relaxed">
+            Work with talented people at the most affordable price to get the
+            most out of your time and cost.
+          </Motion.p>
+
+          {/* SEARCH BAR AREA */}
+          <Motion.div className="bg-white p-2 rounded-xl shadow-xl flex flex-col md:flex-row items-center border border-gray-100 max-w-2xl">
+            <div className="flex items-center px-4 py-2 w-full border-b md:border-b-0 md:border-r border-gray-200">
+              <Search className="text-gray-400 mr-2" size={20} />
+              <input
+                type="text"
+                placeholder="What are you looking for?"
+                className="outline-none w-full text-gray-700 placeholder-gray-400"
+              />
+            </div>
+            <div className="flex items-center px-4 py-2 w-full">
+              <MapPin className="text-gray-400 mr-2" size={20} />
+              <select className="outline-none w-full text-gray-700 bg-transparent cursor-pointer">
+                <option>City, state, or zip</option>
+              </select>
+            </div>
+            <button className="bg-[#357266] hover:bg-[#2a5a51] text-white px-10 py-4 rounded-lg font-semibold transition-all w-full md:w-auto">
+              Search
+            </button>
+          </Motion.div>
+
+          {/* TRUSTED BY LOGOS */}
+          <div className="pt-8">
+            <p className="text-gray-400 text-sm mb-4">Trusted by</p>
+            <div className="flex flex-wrap gap-8 opacity-60 grayscale">
+              {/* Replace these with actual SVGs/Images from the screenshot */}
+              <span className="text-xl font-bold italic text-gray-700 underline decoration-orange-500">
+                amazon
+              </span>
+              <span className="text-xl font-bold text-gray-700">AMD</span>
+              <span className="text-xl font-semibold text-gray-700">
+                logitech
+              </span>
+              <span className="text-xl font-bold text-gray-700">Spotify</span>
+            </div>
+          </div>
         </Motion.div>
-      </Motion.div>
-    </Motion.div>
+
+        {/* RIGHT IMAGE COLLAGE */}
+        <div className="relative h-[500px] w-full hidden md:block">
+          {/* Main Large Image (Middle) */}
+          <Motion.div
+            variants={imageVariants}
+            className="absolute left-0 top-0 w-2/3 h-full rounded-2xl overflow-hidden shadow-2xl z-10"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600"
+              alt="Expert"
+              className="w-full h-full object-cover"
+            />
+          </Motion.div>
+
+          {/* Top Right Small (Pink bg) */}
+          <Motion.div
+            variants={imageVariants}
+            className="absolute right-0 top-0 w-1/3 h-[45%] rounded-2xl overflow-hidden bg-[#fce4ec] z-20 shadow-lg"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&q=80&w=300"
+              alt="Freelancer"
+              className="w-full h-full object-cover mix-blend-multiply"
+            />
+          </Motion.div>
+
+          {/* Bottom Right Small (Blue/White bg) */}
+          <Motion.div
+            variants={imageVariants}
+            className="absolute right-0 bottom-0 w-1/3 h-[50%] rounded-2xl overflow-hidden bg-white z-20 shadow-lg"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&q=80&w=300"
+              alt="Professional"
+              className="w-full h-full object-cover"
+            />
+          </Motion.div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -20,7 +20,7 @@ const JobDetails = () => {
         setLoading(true);
         setError("");
         const response = await axios.get(
-          `https://freelio-server.vercel.app/allJobs/${id}`
+          `https://freelio-server.vercel.app/allJobs/${id}`,
         );
         setJob(response.data);
       } catch (err) {
@@ -28,7 +28,7 @@ const JobDetails = () => {
         setError(
           err.response?.status === 404
             ? "Job not found."
-            : "Failed to fetch job details."
+            : "Failed to fetch job details.",
         );
       } finally {
         setLoading(false);
@@ -49,14 +49,14 @@ const JobDetails = () => {
           jobId: job._id,
           userEmail: user.email,
           userName: user.displayName,
-        }
+        },
       );
       toast.success(response.data.message);
       setTimeout(() => navigate("/acceptedtask"), 1000);
     } catch (err) {
       console.error(err);
       toast.error(
-        err.response?.data?.message || "Failed to accept job. Try again."
+        err.response?.data?.message || "Failed to accept job. Try again.",
       );
     }
   };
@@ -67,13 +67,13 @@ const JobDetails = () => {
       return;
     }
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this job?"
+      "Are you sure you want to delete this job?",
     );
     if (!confirmDelete) return;
 
     try {
       const response = await axios.delete(
-        `https://freelio-server.vercel.app/deleteJob/${job._id}`
+        `https://freelio-server.vercel.app/deleteJob/${job._id}`,
       );
       toast.success(response.data.message);
       setTimeout(() => navigate("/alljobs"), 1000);

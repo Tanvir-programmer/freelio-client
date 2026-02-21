@@ -27,7 +27,6 @@ const Navbar = () => {
     html.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
 
-    // Sync Tailwind dark class if using Tailwind's dark mode strategy
     if (theme === "dark") {
       html.classList.add("dark");
     } else {
@@ -38,7 +37,6 @@ const Navbar = () => {
   const toggleTheme = () =>
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
-  // Event Listener for clicks outside the profile dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -69,18 +67,20 @@ const Navbar = () => {
   ];
 
   const activeLinkStyle = ({ isActive }) =>
-    `transition-colors duration-200 font-medium ${isActive ? "text-indigo-600 dark:text-indigo-400" : "hover:text-indigo-500"}`;
+    `transition-colors duration-200 font-medium ${
+      isActive ? "text-[#387d61] dark:text-[#387d61]" : "hover:text-[#387d61]"
+    }`;
 
   return (
     <nav className="navbar bg-base-100 dark:bg-gray-900 shadow-md px-4 md:px-8 sticky top-0 z-50">
       {/* Branding */}
       <div className="navbar-start">
-        <Link
+        <div
           to="/"
-          className="text-2xl font-extrabold tracking-tight flex items-center"
+          className="text-2xl font-extrabold tracking-tight flex items-center "
         >
-          Free<span className="text-indigo-600">lio</span>
-        </Link>
+         <NavLink to="/"> Free<span className="text-[#387d61]">lio</span></NavLink>
+        </div>
       </div>
 
       {/* Desktop Navigation */}
@@ -127,7 +127,7 @@ const Navbar = () => {
                     "https://ui-avatars.com/api/?name=" + user.email
                   }
                   alt="Profile"
-                  className="w-10 h-10 rounded-full border-2 border-indigo-500 object-cover shadow-sm"
+                  className="w-10 h-10 rounded-full border-2 border-[#387d61] object-cover shadow-sm"
                 />
               </button>
 
@@ -144,20 +144,20 @@ const Navbar = () => {
 
                   <Link
                     to="/profile"
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700"
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-[#387d61]/10"
                     onClick={() => setDropdownOpen(false)}
                   >
-                    <FiUser className="mr-3 text-indigo-500" /> My Profile
+                    <FiUser className="mr-3 text-[#387d61]" /> My Profile
                   </Link>
 
                   <button
                     onClick={toggleTheme}
-                    className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700"
+                    className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-[#387d61]/10"
                   >
                     {isDarkMode ? (
                       <FiSun className="mr-3 text-yellow-500" />
                     ) : (
-                      <FiMoon className="mr-3 text-indigo-500" />
+                      <FiMoon className="mr-3 text-[#387d61]" />
                     )}
                     {isDarkMode ? "Light Mode" : "Dark Mode"}
                   </button>

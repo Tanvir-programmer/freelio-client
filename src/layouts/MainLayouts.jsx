@@ -10,7 +10,7 @@ const MainLayouts = () => {
         <Navbar></Navbar>
       </div>
       <div className="min-h-screen">
-        <div className="w-11/12 mx-auto">
+        <div className="">
           <Outlet></Outlet>
         </div>
       </div>

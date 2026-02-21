@@ -10,7 +10,7 @@ const Footer = () => {
         <aside className="flex items-center gap-4">
           <div className="flex items-center">
             <div className="bg-neutral text-neutral-content px-3 py-1 rounded-lg font-black text-xl tracking-tight">
-              Free<span className="text-indigo-400">lio</span>
+              Free<span className="text-[#397e62]">lio</span>
             </div>
           </div>
           <div className="text-sm opacity-70">

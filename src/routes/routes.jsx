@@ -14,6 +14,7 @@ import UpdateJob from "../pages/UpdateJob"; // ✅ Import UpdateJob
 import Profile from "../components/Profile";
 import DeleteJob from "../pages/DeleteJob";
 import AboutUs from "../pages/AboutUs";
+import Qna from "../components/Qna";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "/trust",
         element: <Trust />,
+      },
+      {
+        path: "/qna",
+        element: <Qna></Qna>,
       },
       {
         path: "/allJobs/:id",

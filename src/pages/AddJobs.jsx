@@ -68,7 +68,7 @@ const AddJobs = () => {
     <div className="max-w-6xl mx-auto mt-10 p-6 grid md:grid-cols-2 gap-10">
       {/* Form */}
       <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-        <h2 className="text-3xl font-bold text-indigo-600 mb-6 text-center">
+        <h2 className="text-3xl font-bold text-[#387d61] mb-6 text-center">
           Post a New Job
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -82,7 +82,7 @@ const AddJobs = () => {
               value={jobData.title}
               onChange={handleChange}
               placeholder="Enter job title"
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#387d61] transition"
               required
             />
           </div>
@@ -94,7 +94,7 @@ const AddJobs = () => {
               name="category"
               value={jobData.category}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#387d61] transition"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -112,7 +112,7 @@ const AddJobs = () => {
               value={jobData.summary}
               onChange={handleChange}
               placeholder="Describe the job in detail"
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition h-32"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#387d61] transition h-32"
               required
             />
           </div>
@@ -126,7 +126,7 @@ const AddJobs = () => {
               value={jobData.cover}
               onChange={handleChange}
               placeholder="Enter image URL"
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#387d61] transition"
               required
             />
           </div>
@@ -157,7 +157,7 @@ const AddJobs = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition"
+            className="w-full py-3 bg-[#387d61] text-white font-semibold rounded-lg hover:bg-[#3f9f79] transition"
           >
             {loading ? "Posting..." : "Post Job"}
           </button>
@@ -171,7 +171,7 @@ const AddJobs = () => {
         </h3>
         <div className="flex flex-col gap-4">
           <div className="p-4 border rounded-lg bg-white shadow-sm">
-            <h4 className="text-xl font-semibold text-indigo-600">
+            <h4 className="text-xl font-semibold text-[#387d61]">
               {jobData.title || "Job Title"}
             </h4>
             <p className="text-gray-600">
